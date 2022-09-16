@@ -28,3 +28,4 @@ exit(
         ->getRunner($app)
         ->run()
 );
+?>
