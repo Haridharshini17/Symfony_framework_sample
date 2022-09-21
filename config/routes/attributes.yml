@@ -1,0 +1,4 @@
+message:
+     resource: ../src/Controller/MessageController.php
+     type: attribute
+    
