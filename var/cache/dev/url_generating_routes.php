@@ -9,4 +9,5 @@ return [
     'examplepage' => [['slug'], ['slug' => 1, '_controller' => 'App\\Controller\\MessageController::slugExample'], ['slug' => '\\d+'], [['variable', '/', '\\d+', 'slug', true], ['text', '/nextpage']], [], [], []],
     'requirementpage' => [['slug'], ['_controller' => 'App\\Controller\\MessageController::requirement'], [], [['variable', '/', '[^/]++', 'slug', true], ['text', '/nextpage']], [], [], []],
     'twigpage' => [[], ['_controller' => 'App\\Controller\\MessageController::twigexample'], [], [['text', '/twigexample']], [], [], []],
+    'app_table_example' => [[], ['_controller' => 'App\\Controller\\TableExampleController::createRecord'], [], [['text', '/table/example']], [], [], []],
 ];
