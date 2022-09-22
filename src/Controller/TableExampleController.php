@@ -13,20 +13,20 @@ class TableExampleController extends AbstractController
 {
     #[Route('/table/example', name: 'app_table_example')]
     
-        public function createProduct(ManagerRegistry $doctrine): Response
+        public function createRecord(ManagerRegistry $doctrine): Response
         {
             $entityManager = $doctrine->getManager();
     
-            $product = new SymfonyExample();
-            $product->setName('jothi');
-            $product->setAge(23);
+            $record = new SymfonyExample();
+            $record->setName('jothi');
+            $record->setAge(23);
             
     
-            $entityManager->persist($product);
+            $entityManager->persist($record);
     
             $entityManager->flush();
     
-            return new Response('Saved new product with id '.$product->getId());
+            return new Response('Saved new record with id '.$record->getId());
         }
         // return $this->render('table_example/index.html.twig', [
         //     'controller_name' => 'TableExampleController',
