@@ -18,7 +18,6 @@ class TableExampleController extends AbstractController
             $entityManager = $doctrine->getManager();
     
             $product = new SymfonyExample();
-            $product->getId(1);
             $product->setName('jothi');
             $product->setAge(23);
             
