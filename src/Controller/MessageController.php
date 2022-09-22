@@ -36,7 +36,12 @@ class MessageController extends AbstractController
     {
         $userName = 'Hari';
         $userAge = 20;
-        return $this->render('user.html.twig',['user_name'=>$userName,'user_age'=>$userAge]);
+        // return $this->render('user.html.twig',['user_name'=>$userName,'user_age'=>$userAge]);
+        $contents = $this->renderView('user.html.twig',['user_name'=>$userName,'user_age'=>$userAge]);
+        return new Response($contents);
+       
+
+    
     }
 }
 ?>
