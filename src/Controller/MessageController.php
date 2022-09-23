@@ -13,12 +13,12 @@ class MessageController extends AbstractController
         $message = "SYMFONY World";
         return $this->render('message.html.twig',['message'=>$message]); 
     }
-    // #[Route(' /nextpage', name: 'nextpage',)]
-    // public function nextpage(): Response
-    // {
-    //     $nextpage = "Next page..Hi!!";
-    //     return $this->render('message.html.twig',['message'=>$nextpage]);
-    // }
+    #[Route(' /nextpage', name: 'nextpage',)]
+    public function nextpage(): Response
+    {
+        $nextpage = "Next page..Hi!!";
+        return $this->render('message.html.twig',['message'=>$nextpage]);
+    }
     #[Route(' /nextpage/{slug}', name: 'examplepage', requirements: ['slug' => '\d+'])]//we can also present default value as /nextpage/{slug<\d+>?1}
     public function slugExample(int $slug = 1): Response
     {

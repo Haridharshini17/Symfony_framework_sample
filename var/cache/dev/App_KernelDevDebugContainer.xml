@@ -200,6 +200,10 @@
         <argument type="service" id=".service_locator.jIxfAsi.App\Controller\TableExampleController"/>
       </call>
     </service>
+    <service id="App\Repository\RegenerateRepository" class="App\Repository\RegenerateRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
     <service id="App\Repository\SymfonyExampleRepository" class="App\Repository\SymfonyExampleRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
@@ -2115,7 +2119,7 @@
       <factory class="Doctrine\ORM\EntityManager" method="create"/>
     </service>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory">
-      <argument type="service" id=".service_locator.G7bIDwR"/>
+      <argument type="service" id=".service_locator.grpPCEM"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -2704,6 +2708,8 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\TableExampleController" class="App\Controller\TableExampleController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\TableExampleController" class="App\Controller\TableExampleController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\TableExampleController" class="App\Controller\TableExampleController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\RegenerateRepository" class="App\Repository\RegenerateRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\RegenerateRepository" class="App\Repository\RegenerateRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\SymfonyExampleRepository" class="App\Repository\SymfonyExampleRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\SymfonyExampleRepository" class="App\Repository\SymfonyExampleRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".service_locator.gSv9zYw" class="Symfony\Component\DependencyInjection\ServiceLocator">
@@ -3126,9 +3132,10 @@
         <argument key="doctrine.orm.listeners.doctrine_token_provider_schema_subscriber" type="service_closure" id="doctrine.orm.listeners.doctrine_token_provider_schema_subscriber"/>
       </argument>
     </service>
-    <service id=".service_locator.G7bIDwR" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.grpPCEM" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Repository\RegenerateRepository" type="service_closure" id="App\Repository\RegenerateRepository"/>
         <argument key="App\Repository\SymfonyExampleRepository" type="service_closure" id="App\Repository\SymfonyExampleRepository"/>
       </argument>
     </service>

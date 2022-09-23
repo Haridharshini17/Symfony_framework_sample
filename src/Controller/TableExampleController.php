@@ -12,21 +12,17 @@ class TableExampleController extends AbstractController
 {
     #[Route('/table/example', name: 'app_table_example')]
     
-        public function createRecord(ManagerRegistry $doctrine): Response
+    public function createRecord(ManagerRegistry $doctrine): Response
         {
         
             $entityManager = $doctrine->getManager();
-    
             $record = new SymfonyExample();
-            $record->setName('jothi');
+            $record->setName('Hema');
             $record->setAge(23);
-            
-    
             $entityManager->persist($record);
-    
             $entityManager->flush();
-    
-            return new Response('Saved new record with id '.$record->getId());
+                return new Response('Saved new record with id '.$record->getId());
+            
         }
         // return $this->render('table_example/index.html.twig', [
         //     'controller_name' => 'TableExampleController',
