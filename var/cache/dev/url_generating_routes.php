@@ -11,4 +11,6 @@ return [
     'requirementpage' => [['slug'], ['_controller' => 'App\\Controller\\MessageController::requirement'], [], [['variable', '/', '[^/]++', 'slug', true], ['text', '/nextpage']], [], [], []],
     'twigpage' => [[], ['_controller' => 'App\\Controller\\MessageController::twigexample'], [], [['text', '/twigexample']], [], [], []],
     'app_table_example' => [[], ['_controller' => 'App\\Controller\\TableExampleController::createRecord'], [], [['text', '/table/example']], [], [], []],
+    'product_show' => [['id'], ['_controller' => 'App\\Controller\\TableExampleController::show'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/record']], [], [], []],
+    'product_shows' => [['id'], ['_controller' => 'App\\Controller\\TableExampleController::shows'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/products']], [], [], []],
 ];
