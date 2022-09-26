@@ -15,7 +15,7 @@ class EmployeeController extends AbstractController
     {
         $data = $doctrine->getManager();
         $record = new EmployeeInformation();
-        $record->setName(1);
+        $record->setName("siva");
         $record->setAge(22);
         $record->setDesignation('Software Developer');
         $record->setEducation('BE');
