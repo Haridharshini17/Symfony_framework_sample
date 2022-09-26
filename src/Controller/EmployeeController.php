@@ -34,7 +34,7 @@ class EmployeeController extends AbstractController
         }
            return new Response('DATAS:'.$record->getName()  .$record->getAge() .$record->getDesignation() .$record->getEducation() .$record->getCity());
     }
-    #[Route('/update/employee/{id}', name: 'showing_employee')]
+    #[Route('/update/employee/{id}', name: 'update_employee')]
     public function update(ManagerRegistry $doctrine ,$id): Response
     {
         $data = $doctrine->getManager();
