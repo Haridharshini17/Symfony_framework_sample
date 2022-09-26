@@ -2604,6 +2604,9 @@
       <tag name="maker.command"/>
       <argument type="service" id="maker.php_compat_util"/>
     </service>
+    <service id="maker.maker.make_twig_component" class="Symfony\Bundle\MakerBundle\Maker\MakeTwigComponent">
+      <tag name="maker.command"/>
+    </service>
     <service id="maker.maker.make_controller" class="Symfony\Bundle\MakerBundle\Maker\MakeController">
       <tag name="maker.command"/>
       <argument type="service" id="maker.php_compat_util"/>
@@ -2758,6 +2761,19 @@
       </call>
       <call method="setDescription">
         <argument>Creates a new console command class</argument>
+      </call>
+    </service>
+    <service id="maker.auto_command.make_twig_component" class="Symfony\Bundle\MakerBundle\Command\MakerCommand">
+      <tag name="console.command" command="make:twig-component" description="Creates a twig (or live) component"/>
+      <tag name="container.no_preload"/>
+      <argument type="service" id="maker.maker.make_twig_component"/>
+      <argument type="service" id="maker.file_manager"/>
+      <argument type="service" id="maker.generator"/>
+      <call method="setName">
+        <argument>make:twig-component</argument>
+      </call>
+      <call method="setDescription">
+        <argument>Creates a twig (or live) component</argument>
       </call>
     </service>
     <service id="maker.auto_command.make_controller" class="Symfony\Bundle\MakerBundle\Command\MakerCommand">
@@ -3540,6 +3556,13 @@
       <argument>false</argument>
       <argument type="service_closure" id="maker.auto_command.make_command"/>
     </service>
+    <service id=".maker.auto_command.make_twig_component.lazy" class="Symfony\Component\Console\Command\LazyCommand">
+      <argument>make:twig-component</argument>
+      <argument type="collection"/>
+      <argument>Creates a twig (or live) component</argument>
+      <argument>false</argument>
+      <argument type="service_closure" id="maker.auto_command.make_twig_component"/>
+    </service>
     <service id=".maker.auto_command.make_controller.lazy" class="Symfony\Component\Console\Command\LazyCommand">
       <argument>make:controller</argument>
       <argument type="collection"/>
@@ -3685,7 +3708,7 @@
     </service>
     <service id="console.command_loader" class="Symfony\Component\Console\CommandLoader\ContainerCommandLoader" public="true">
       <tag name="container.no_preload"/>
-      <argument type="service" id=".service_locator.C8ri5fm"/>
+      <argument type="service" id=".service_locator.QStG.YU"/>
       <argument type="collection">
         <argument key="about">console.command.about</argument>
         <argument key="assets:install">console.command.assets_install</argument>
@@ -3749,6 +3772,7 @@
         <argument key="doctrine:migrations:version">doctrine_migrations.version_command</argument>
         <argument key="make:auth">maker.auto_command.make_auth</argument>
         <argument key="make:command">maker.auto_command.make_command</argument>
+        <argument key="make:twig-component">maker.auto_command.make_twig_component</argument>
         <argument key="make:controller">maker.auto_command.make_controller</argument>
         <argument key="make:crud">maker.auto_command.make_crud</argument>
         <argument key="make:docker:database">maker.auto_command.make_docker_database</argument>
@@ -3773,7 +3797,7 @@
         <argument key="make:stimulus-controller">maker.auto_command.make_stimulus_controller</argument>
       </argument>
     </service>
-    <service id=".service_locator.C8ri5fm" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.QStG.YU" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="console.command.about" type="service_closure" id=".console.command.about.lazy"/>
@@ -3838,6 +3862,7 @@
         <argument key="doctrine_migrations.version_command" type="service_closure" id="doctrine_migrations.version_command"/>
         <argument key="maker.auto_command.make_auth" type="service_closure" id=".maker.auto_command.make_auth.lazy"/>
         <argument key="maker.auto_command.make_command" type="service_closure" id=".maker.auto_command.make_command.lazy"/>
+        <argument key="maker.auto_command.make_twig_component" type="service_closure" id=".maker.auto_command.make_twig_component.lazy"/>
         <argument key="maker.auto_command.make_controller" type="service_closure" id=".maker.auto_command.make_controller.lazy"/>
         <argument key="maker.auto_command.make_crud" type="service_closure" id=".maker.auto_command.make_crud.lazy"/>
         <argument key="maker.auto_command.make_docker_database" type="service_closure" id=".maker.auto_command.make_docker_database.lazy"/>
