@@ -4,6 +4,10 @@
 
 return [
     '_preview_error' => [['code', '_format'], ['_controller' => 'error_controller::preview', '_format' => 'html'], ['code' => '\\d+'], [['variable', '.', '[^/]++', '_format', true], ['variable', '/', '\\d+', 'code', true], ['text', '/_error']], [], [], []],
+    'add_employee' => [[], ['_controller' => 'App\\Controller\\EmployeeController::create'], [], [['text', '/create/employee']], [], [], []],
+    'show_employee' => [['id'], ['_controller' => 'App\\Controller\\EmployeeController::show'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/show/employee']], [], [], []],
+    'showing_employee' => [['id'], ['_controller' => 'App\\Controller\\EmployeeController::update'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/update/employee']], [], [], []],
+    'delete_employee' => [['id'], ['_controller' => 'App\\Controller\\EmployeeController::delete'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/delete/employee']], [], [], []],
     'app_example' => [[], ['_controller' => 'App\\Controller\\ExampleController::index'], [], [['text', '/example']], [], [], []],
     'hello' => [[], ['_controller' => 'App\\Controller\\MessageController::greetings'], [], [['text', '/']], [], [], []],
     'nextpage' => [[], ['_controller' => 'App\\Controller\\MessageController::nextpage'], [], [['text', '/nextpage']], [], [], []],

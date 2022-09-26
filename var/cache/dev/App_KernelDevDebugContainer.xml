@@ -179,6 +179,13 @@
       <tag name="controller.service_arguments"/>
       <tag name="routing.route_loader"/>
     </service>
+    <service id="App\Controller\EmployeeController" class="App\Controller\EmployeeController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.jIxfAsi.App\Controller\EmployeeController"/>
+      </call>
+    </service>
     <service id="App\Controller\ExampleController" class="App\Controller\ExampleController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
@@ -199,6 +206,10 @@
       <call method="setContainer">
         <argument type="service" id=".service_locator.jIxfAsi.App\Controller\TableExampleController"/>
       </call>
+    </service>
+    <service id="App\Repository\EmployeeInformationRepository" class="App\Repository\EmployeeInformationRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
     </service>
     <service id="App\Repository\RegenerateRepository" class="App\Repository\RegenerateRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
@@ -2119,7 +2130,7 @@
       <factory class="Doctrine\ORM\EntityManager" method="create"/>
     </service>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory">
-      <argument type="service" id=".service_locator.grpPCEM"/>
+      <argument type="service" id=".service_locator.0IiCOYI"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -2702,6 +2713,9 @@
     <service id="maker.maker.make_stimulus_controller" class="Symfony\Bundle\MakerBundle\Maker\MakeStimulusController">
       <tag name="maker.command"/>
     </service>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\EmployeeController" class="App\Controller\EmployeeController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\EmployeeController" class="App\Controller\EmployeeController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\EmployeeController" class="App\Controller\EmployeeController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\ExampleController" class="App\Controller\ExampleController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\ExampleController" class="App\Controller\ExampleController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\ExampleController" class="App\Controller\ExampleController" autowire="true" autoconfigure="true" abstract="true"/>
@@ -2711,6 +2725,8 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\TableExampleController" class="App\Controller\TableExampleController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\TableExampleController" class="App\Controller\TableExampleController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\TableExampleController" class="App\Controller\TableExampleController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\EmployeeInformationRepository" class="App\Repository\EmployeeInformationRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\EmployeeInformationRepository" class="App\Repository\EmployeeInformationRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\RegenerateRepository" class="App\Repository\RegenerateRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\RegenerateRepository" class="App\Repository\RegenerateRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\SymfonyExampleRepository" class="App\Repository\SymfonyExampleRepository" autowire="true" abstract="true"/>
@@ -3068,9 +3084,13 @@
         <argument key="record" type="service_closure" id=".errored..service_locator.amLFGfE.App\Entity\SymfonyExample"/>
       </argument>
     </service>
-    <service id=".service_locator.jhPfDQ3" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.oKam1Fc" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Controller\EmployeeController::create" type="service_closure" id=".service_locator.GQZbvNR"/>
+        <argument key="App\Controller\EmployeeController::delete" type="service_closure" id=".service_locator.GQZbvNR"/>
+        <argument key="App\Controller\EmployeeController::show" type="service_closure" id=".service_locator.GQZbvNR"/>
+        <argument key="App\Controller\EmployeeController::update" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController::createRecord" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController::show" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController::shows" type="service_closure" id=".service_locator.amLFGfE"/>
@@ -3080,6 +3100,10 @@
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.xUrKPVU"/>
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.xUrKPVU"/>
         <argument key="kernel::terminate" type="service_closure" id=".service_locator.bRdave9"/>
+        <argument key="App\Controller\EmployeeController:create" type="service_closure" id=".service_locator.GQZbvNR"/>
+        <argument key="App\Controller\EmployeeController:delete" type="service_closure" id=".service_locator.GQZbvNR"/>
+        <argument key="App\Controller\EmployeeController:show" type="service_closure" id=".service_locator.GQZbvNR"/>
+        <argument key="App\Controller\EmployeeController:update" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController:createRecord" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController:show" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController:shows" type="service_closure" id=".service_locator.amLFGfE"/>
@@ -3158,9 +3182,10 @@
         <argument key="doctrine.orm.listeners.doctrine_token_provider_schema_subscriber" type="service_closure" id="doctrine.orm.listeners.doctrine_token_provider_schema_subscriber"/>
       </argument>
     </service>
-    <service id=".service_locator.grpPCEM" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.0IiCOYI" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Repository\EmployeeInformationRepository" type="service_closure" id="App\Repository\EmployeeInformationRepository"/>
         <argument key="App\Repository\RegenerateRepository" type="service_closure" id="App\Repository\RegenerateRepository"/>
         <argument key="App\Repository\SymfonyExampleRepository" type="service_closure" id="App\Repository\SymfonyExampleRepository"/>
       </argument>
@@ -3193,6 +3218,12 @@
         <argument key="router" type="service_closure" id="router.default" on-invalid="ignore"/>
         <argument key="twig" type="service_closure" id="twig" on-invalid="ignore"/>
       </argument>
+    </service>
+    <service id=".service_locator.jIxfAsi.App\Controller\EmployeeController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\EmployeeController"/>
+      <argument>App\Controller\EmployeeController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.jIxfAsi" method="withContext"/>
     </service>
     <service id=".service_locator.jIxfAsi.App\Controller\ExampleController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\ExampleController"/>
@@ -3330,12 +3361,12 @@
     <service id="debug.argument_resolver.request.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver"/>
     <service id="debug.argument_resolver.session.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\SessionValueResolver"/>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator.jhPfDQ3"/>
+      <argument type="service" id=".service_locator.oKam1Fc"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator.jhPfDQ3"/>
+      <argument type="service" id=".service_locator.oKam1Fc"/>
     </service>
     <service id=".doctrine.orm.default_metadata_driver.inner" class="Doctrine\Persistence\Mapping\Driver\MappingDriverChain">
       <call method="addDriver">
@@ -3955,12 +3986,12 @@
     <service id="doctrine.migrations.metadata_storage" alias="doctrine.migrations.storage.table_storage"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.gSv9zYw" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.jhPfDQ3"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.oKam1Fc"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="Psr\Log\LoggerInterface" alias="logger"/>
     <service id=".service_locator.0GV1BZZ" alias=".service_locator.gSv9zYw"/>
-    <service id=".service_locator.cgsuC8a" alias=".service_locator.jhPfDQ3"/>
+    <service id=".service_locator.Y.FwSs7" alias=".service_locator.oKam1Fc"/>
     <service id=".service_locator.bkUSUfi" alias=".service_locator.AHPGEE6"/>
     <service id=".service_locator.qBCHs1a" alias=".service_locator.QXcJQkF"/>
     <service id=".service_locator._eRAkJb" alias=".service_locator.jIxfAsi"/>
