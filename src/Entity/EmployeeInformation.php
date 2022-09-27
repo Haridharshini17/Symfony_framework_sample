@@ -93,4 +93,9 @@ class EmployeeInformation
 
         return $this;
     }
+    ##EXAMPLE FOR THERE NO COLUMN NAMECITY IN TABLE BUT BY USING METHODS WE CAN ADD FOR THIS DOCTRINE HELPS
+    public function getNameCity(): ?string
+    {
+        return $this->getName().' '.$this->getAge();
+    }
 }

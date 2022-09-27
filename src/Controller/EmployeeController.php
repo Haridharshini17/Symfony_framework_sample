@@ -61,4 +61,17 @@ class EmployeeController extends AbstractController
         $data->flush();
         return $this->redirectToRoute('nextpage');
     }
+    ##EXAMPLE FOR THERE NO COLUMN NAMECITY IN TABLE BUT BY USING METHODS WE CAN ADD FOR THIS DOCTRINE HELPS
+    #[Route('/merge/employee/{id}', name: 'delete_employee')]
+    public function merge(ManagerRegistry $doctrine, $id): Response
+    {
+          $data = $doctrine->getManager();
+          $record = $doctrine->getRepository(EmployeeInformation::class)->find($id);
+          IF(!$record)
+          {
+            throw $this->createNotFoundException('Not Found');
+          }
+          return new Response('Datas:'.$record->getNameCity());
+
+    }
 }

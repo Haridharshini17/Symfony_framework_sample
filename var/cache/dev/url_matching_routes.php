@@ -20,24 +20,24 @@ return [
                 .'|/_error/(\\d+)(?:\\.([^/]++))?(*:35)'
                 .'|/show/employee/([^/]++)(*:65)'
                 .'|/update/employee/([^/]++)(*:97)'
-                .'|/delete/employee/([^/]++)(*:129)'
+                .'|/merge/employee/([^/]++)(*:128)'
                 .'|/nextpage(?'
-                    .'|(?:/(\\d+))?(*:160)'
-                    .'|/([^/]++)(*:177)'
+                    .'|(?:/(\\d+))?(*:159)'
+                    .'|/([^/]++)(*:176)'
                 .')'
-                .'|/record/([^/]++)(*:202)'
-                .'|/products/([^/]++)(*:228)'
+                .'|/record/([^/]++)(*:201)'
+                .'|/products/([^/]++)(*:227)'
             .')/?$}sDu',
     ],
     [ // $dynamicRoutes
         35 => [[['_route' => '_preview_error', '_controller' => 'error_controller::preview', '_format' => 'html'], ['code', '_format'], null, null, false, true, null]],
         65 => [[['_route' => 'show_employee', '_controller' => 'App\\Controller\\EmployeeController::show'], ['id'], null, null, false, true, null]],
-        97 => [[['_route' => 'showing_employee', '_controller' => 'App\\Controller\\EmployeeController::update'], ['id'], null, null, false, true, null]],
-        129 => [[['_route' => 'delete_employee', '_controller' => 'App\\Controller\\EmployeeController::delete'], ['id'], null, null, false, true, null]],
-        160 => [[['_route' => 'examplepage', 'slug' => 1, '_controller' => 'App\\Controller\\MessageController::slugExample'], ['slug'], null, null, false, true, null]],
-        177 => [[['_route' => 'requirementpage', '_controller' => 'App\\Controller\\MessageController::requirement'], ['slug'], null, null, false, true, null]],
-        202 => [[['_route' => 'product_show', '_controller' => 'App\\Controller\\TableExampleController::show'], ['id'], null, null, false, true, null]],
-        228 => [
+        97 => [[['_route' => 'update_employee', '_controller' => 'App\\Controller\\EmployeeController::update'], ['id'], null, null, false, true, null]],
+        128 => [[['_route' => 'delete_employee', '_controller' => 'App\\Controller\\EmployeeController::merge'], ['id'], null, null, false, true, null]],
+        159 => [[['_route' => 'examplepage', 'slug' => 1, '_controller' => 'App\\Controller\\MessageController::slugExample'], ['slug'], null, null, false, true, null]],
+        176 => [[['_route' => 'requirementpage', '_controller' => 'App\\Controller\\MessageController::requirement'], ['slug'], null, null, false, true, null]],
+        201 => [[['_route' => 'product_show', '_controller' => 'App\\Controller\\TableExampleController::show'], ['id'], null, null, false, true, null]],
+        227 => [
             [['_route' => 'product_shows', '_controller' => 'App\\Controller\\TableExampleController::shows'], ['id'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],
