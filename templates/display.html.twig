@@ -1,0 +1,20 @@
+
+<h2>Employee database application!</h2>  
+<table class = "table">  
+   <tr>  
+      <th>Name</th>  
+      <th>Age</th>  
+      <th>Designation</th>
+      <th>Education</th>
+      <th>City</th>
+   </tr>  
+   {% for x in data %} 
+   <tr>  
+      <td>{{ x.Name }}</td>   
+      <td>{{ x.Age }}</td>   
+      <td>{{ x.Designation }}</td>
+      <td>{{ x.Education }}</td>
+      <td>{{ x.City }}</td>
+   </tr>  
+   {% endfor %} 
+</table> 

@@ -98,4 +98,9 @@ class EmployeeInformation
     {
         return $this->getName().' '.$this->getAge();
     }
+    public function prepare()
+    {
+        $sql = 'SELECT *FROM employee_information WHERE id = 3';
+        return $this->prepare($sql);
+    }
 }

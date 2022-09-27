@@ -220,6 +220,10 @@
       <argument type="service" id="doctrine"/>
     </service>
     <service id="App\Service\MixRepository" class="App\Service\MixRepository" autowire="true" autoconfigure="true"/>
+    <service id="App\Validator\EmployeeInformation" class="App\Validator\EmployeeInformation" autowire="true" autoconfigure="true"/>
+    <service id="App\Validator\EmployeeInformationValidator" class="App\Validator\EmployeeInformationValidator" autowire="true" autoconfigure="true">
+      <tag name="validator.constraint_validator"/>
+    </service>
     <service id="argument_metadata_factory" class="Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory"/>
     <service id="response_listener" class="Symfony\Component\HttpKernel\EventListener\ResponseListener">
       <tag name="kernel.event_subscriber"/>
@@ -1642,7 +1646,7 @@
       <factory class="Symfony\Component\Cache\Adapter\PhpArrayAdapter" method="create"/>
     </service>
     <service id="validator.validator_factory" class="Symfony\Component\Validator\ContainerConstraintValidatorFactory">
-      <argument type="service" id=".service_locator.AHPGEE6"/>
+      <argument type="service" id=".service_locator.KznX7JF"/>
     </service>
     <service id="validator.expression" class="Symfony\Component\Validator\Constraints\ExpressionValidator">
       <tag name="validator.constraint_validator" alias="validator.expression"/>
@@ -2731,6 +2735,8 @@
     <service id=".abstract.instanceof.App\Repository\RegenerateRepository" class="App\Repository\RegenerateRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\SymfonyExampleRepository" class="App\Repository\SymfonyExampleRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\SymfonyExampleRepository" class="App\Repository\SymfonyExampleRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Component\Validator\ConstraintValidatorInterface.0.App\Validator\EmployeeInformationValidator" class="App\Validator\EmployeeInformationValidator" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Validator\EmployeeInformationValidator" class="App\Validator\EmployeeInformationValidator" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".service_locator.gSv9zYw" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -3072,6 +3078,13 @@
         <argument key="loader" type="service_closure" id=".errored..service_locator.xUrKPVU.Symfony\Component\Config\Loader\LoaderInterface"/>
       </argument>
     </service>
+    <service id=".service_locator.6B_ZjHa" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="doctrine" type="service_closure" id="doctrine"/>
+        <argument key="validator" type="service_closure" id="validator"/>
+      </argument>
+    </service>
     <service id=".service_locator.GQZbvNR" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -3084,13 +3097,14 @@
         <argument key="record" type="service_closure" id=".errored..service_locator.amLFGfE.App\Entity\SymfonyExample"/>
       </argument>
     </service>
-    <service id=".service_locator.I4a5A3f" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.S5PPar9" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
-        <argument key="App\Controller\EmployeeController::create" type="service_closure" id=".service_locator.GQZbvNR"/>
+        <argument key="App\Controller\EmployeeController::create" type="service_closure" id=".service_locator.6B_ZjHa"/>
         <argument key="App\Controller\EmployeeController::delete" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\EmployeeController::merge" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\EmployeeController::show" type="service_closure" id=".service_locator.GQZbvNR"/>
+        <argument key="App\Controller\EmployeeController::showAll" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\EmployeeController::update" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController::createRecord" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController::show" type="service_closure" id=".service_locator.GQZbvNR"/>
@@ -3101,10 +3115,11 @@
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.xUrKPVU"/>
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.xUrKPVU"/>
         <argument key="kernel::terminate" type="service_closure" id=".service_locator.bRdave9"/>
-        <argument key="App\Controller\EmployeeController:create" type="service_closure" id=".service_locator.GQZbvNR"/>
+        <argument key="App\Controller\EmployeeController:create" type="service_closure" id=".service_locator.6B_ZjHa"/>
         <argument key="App\Controller\EmployeeController:delete" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\EmployeeController:merge" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\EmployeeController:show" type="service_closure" id=".service_locator.GQZbvNR"/>
+        <argument key="App\Controller\EmployeeController:showAll" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\EmployeeController:update" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController:createRecord" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController:show" type="service_closure" id=".service_locator.GQZbvNR"/>
@@ -3114,9 +3129,10 @@
         <argument key="kernel:terminate" type="service_closure" id=".service_locator.bRdave9"/>
       </argument>
     </service>
-    <service id=".service_locator.AHPGEE6" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.KznX7JF" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Validator\EmployeeInformationValidator" type="service_closure" id="App\Validator\EmployeeInformationValidator"/>
         <argument key="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator" type="service_closure" id="doctrine.orm.validator.unique"/>
         <argument key="Symfony\Component\Validator\Constraints\EmailValidator" type="service_closure" id="validator.email"/>
         <argument key="Symfony\Component\Validator\Constraints\ExpressionValidator" type="service_closure" id="validator.expression"/>
@@ -3363,12 +3379,12 @@
     <service id="debug.argument_resolver.request.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver"/>
     <service id="debug.argument_resolver.session.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\SessionValueResolver"/>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator.I4a5A3f"/>
+      <argument type="service" id=".service_locator.S5PPar9"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator.I4a5A3f"/>
+      <argument type="service" id=".service_locator.S5PPar9"/>
     </service>
     <service id=".doctrine.orm.default_metadata_driver.inner" class="Doctrine\Persistence\Mapping\Driver\MappingDriverChain">
       <call method="addDriver">
@@ -3988,13 +4004,13 @@
     <service id="doctrine.migrations.metadata_storage" alias="doctrine.migrations.storage.table_storage"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.gSv9zYw" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.I4a5A3f"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.S5PPar9"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="Psr\Log\LoggerInterface" alias="logger"/>
     <service id=".service_locator.0GV1BZZ" alias=".service_locator.gSv9zYw"/>
-    <service id=".service_locator.U.2BJFz" alias=".service_locator.I4a5A3f"/>
-    <service id=".service_locator.bkUSUfi" alias=".service_locator.AHPGEE6"/>
+    <service id=".service_locator.1blaAny" alias=".service_locator.S5PPar9"/>
+    <service id=".service_locator.Qzd9SK7" alias=".service_locator.KznX7JF"/>
     <service id=".service_locator.qBCHs1a" alias=".service_locator.QXcJQkF"/>
     <service id=".service_locator._eRAkJb" alias=".service_locator.jIxfAsi"/>
     <service id="event_dispatcher" alias="debug.event_dispatcher" public="true"/>
@@ -4014,6 +4030,7 @@
     <service id="doctrine.orm.default_metadata_driver" alias=".doctrine.orm.default_metadata_driver"/>
     <service id=".service_locator.FatRZu2" alias=".service_locator.bRdave9"/>
     <service id=".service_locator.uo5c0SP" alias=".service_locator.xUrKPVU"/>
+    <service id=".service_locator.arik6u0" alias=".service_locator.6B_ZjHa"/>
     <service id=".service_locator.FPFiL9q" alias=".service_locator.GQZbvNR"/>
     <service id=".service_locator.qXSdDZ0" alias=".service_locator.amLFGfE"/>
     <service id=".service_locator.eT4XWle" alias=".service_locator.jIxfAsi"/>
