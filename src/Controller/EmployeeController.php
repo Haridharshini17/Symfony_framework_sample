@@ -10,7 +10,7 @@ use App\Entity\EmployeeInformation;
 
 class EmployeeController extends AbstractController
 {
-    #[Route('/create/employee', name: 'add_employee')]
+    #[Route('/employee/create', name: 'add_employee')]
     public function create(ManagerRegistry $doctrine): Response
     {
         $data = $doctrine->getManager();
@@ -24,17 +24,22 @@ class EmployeeController extends AbstractController
         $data->flush();
          return new Response('saved new record with id:'.$record->getId());     
    }
-    #[Route('/show/employee/{id}', name: 'show_employee')]
+    #[Route('/employee/show/{id}', name: 'show_employee')]
     public function show(ManagerRegistry $doctrine, int $id): Response
     {
         $record = $doctrine->getRepository(EmployeeInformation::class)->find($id);
+        // $sql = 'SELECT * FROM employee_information WHERE id= $id';
+        // echo $sql;
+        // $connection = $record->prepare($sql);
+        // $connection->execute();
+        // var_dump($connection->fetchAll());die;
         if(!$record)
         {
             throw $this->createNotFoundException('Not found');
         }
            return new Response('DATAS:'.$record->getName()  .$record->getAge() .$record->getDesignation() .$record->getEducation() .$record->getCity());
     }
-    #[Route('/update/employee/{id}', name: 'update_employee')]
+    #[Route('/employee/update/{id}', name: 'update_employee')]
     public function update(ManagerRegistry $doctrine ,$id): Response
     {
         $data = $doctrine->getManager();
@@ -48,7 +53,7 @@ class EmployeeController extends AbstractController
         return $this->redirectToRoute('show_employee',
         ['id'=>$record->getid($id)]);
     }
-    #[Route('/delete/employee/{id}', name: 'delete_employee')]
+    #[Route('/employee/update/{id}', name: 'delete_employee')]
     public function delete(ManagerRegistry $doctrine, $id): Response
     {
         $data = $doctrine->getManager();
@@ -62,7 +67,7 @@ class EmployeeController extends AbstractController
         return $this->redirectToRoute('nextpage');
     }
     ##EXAMPLE FOR THERE NO COLUMN NAMECITY IN TABLE BUT BY USING METHODS WE CAN ADD FOR THIS DOCTRINE HELPS
-    #[Route('/merge/employee/{id}', name: 'delete_employee')]
+    #[Route('/employee/merge/{id}', name: 'delete_employee')]
     public function merge(ManagerRegistry $doctrine, $id): Response
     {
           $data = $doctrine->getManager();
