@@ -23,7 +23,7 @@ class EmployeeController extends AbstractController
             echo false;
         }
         else{
-        $record->setName('haridharshini');
+        $record->setName('pranavi');
         $record->setAge(22);
         $record->setDesignation('Software Developer');
         $record->setEducation('BE');
