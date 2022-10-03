@@ -15,7 +15,7 @@ class InjectedController extends AbstractController
       {
         $example = $merge->Message();
         var_dump($example);
-        return  new response('$example');
+        return  new response($example);
       }
 }
 
