@@ -11,10 +11,14 @@ return [
         '/employee/create' => [[['_route' => 'add_employee', '_controller' => 'App\\Controller\\EmployeeController::create'], null, null, null, false, false, null]],
         '/employee/show' => [[['_route' => 'show_allemployee', '_controller' => 'App\\Controller\\EmployeeController::showAll'], null, null, null, false, false, null]],
         '/example' => [[['_route' => 'app_example', '_controller' => 'App\\Controller\\ExampleController::index'], null, null, null, false, false, null]],
-        '/' => [[['_route' => 'hello', '_controller' => 'App\\Controller\\MessageController::greetings'], null, null, null, false, false, null]],
+        '/service/example/2' => [[['_route' => 'example_2', '_controller' => 'App\\Controller\\ExampleController::new'], null, null, null, false, false, null]],
+        '/service/injectedexample' => [[['_route' => 'service_injected', '_controller' => 'App\\Controller\\InjectedController::new'], null, null, null, false, false, null]],
         '/nextpage' => [[['_route' => 'nextpage', '_controller' => 'App\\Controller\\MessageController::nextpage'], null, null, null, false, false, null]],
         '/twigexample' => [[['_route' => 'twigpage', '_controller' => 'App\\Controller\\MessageController::twigexample'], null, null, null, false, false, null]],
+        '/service/example' => [[['_route' => 'service_example', '_controller' => 'App\\Controller\\ServiceExample::new'], null, null, null, false, false, null]],
+        '/service/examples' => [[['_route' => 'service_examples', '_controller' => 'App\\Controller\\ServiceExample2::new'], null, null, null, false, false, null]],
         '/table/example' => [[['_route' => 'app_table_example', '_controller' => 'App\\Controller\\TableExampleController::createRecord'], null, null, null, false, false, null]],
+        '/' => [[['_route' => 'message', '_controller' => 'App\\Controller\\MessageController::greetings'], null, null, null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'

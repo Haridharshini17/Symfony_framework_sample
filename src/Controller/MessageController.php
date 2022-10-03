@@ -4,20 +4,26 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class MessageController extends AbstractController
 {
-    #[Route(' /', name: 'hello',)]
+    // #[Route(' /', name: 'hello',)]
     public function greetings(): Response
     {
         $message = "SYMFONY World";
+        $request = Request::createFromGlobals();
+        echo $request->query->get('name');
+        echo $request;
         return $this->render('message.html.twig',['message'=>$message]); 
     }
     #[Route(' /nextpage', name: 'nextpage',)]
     public function nextpage(): Response
     {
-        $nextpage = "Next page..Hi!!";
+
+        $nextpage = "Next page..Hi!";
         return $this->render('message.html.twig',['message'=>$nextpage]);
+
     }
     #[Route(' /nextpage/{slug}', name: 'examplepage', requirements: ['slug' => '\d+'])]//we can also present default value as /nextpage/{slug<\d+>?1}
     public function slugExample(int $slug = 1): Response

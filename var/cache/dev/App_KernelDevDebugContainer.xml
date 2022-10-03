@@ -16,6 +16,7 @@
       <parameter key="DoctrineBundle">Doctrine\Bundle\DoctrineBundle\DoctrineBundle</parameter>
       <parameter key="DoctrineMigrationsBundle">Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle</parameter>
       <parameter key="MakerBundle">Symfony\Bundle\MakerBundle\MakerBundle</parameter>
+      <parameter key="MonologBundle">Symfony\Bundle\MonologBundle\MonologBundle</parameter>
     </parameter>
     <parameter key="kernel.bundles_metadata" type="collection">
       <parameter key="FrameworkBundle" type="collection">
@@ -46,6 +47,10 @@
         <parameter key="path">/var/www/symfony6.1/vendor/symfony/maker-bundle/src</parameter>
         <parameter key="namespace">Symfony\Bundle\MakerBundle</parameter>
       </parameter>
+      <parameter key="MonologBundle" type="collection">
+        <parameter key="path">/var/www/symfony6.1/vendor/symfony/monolog-bundle</parameter>
+        <parameter key="namespace">Symfony\Bundle\MonologBundle</parameter>
+      </parameter>
     </parameter>
     <parameter key="kernel.charset">UTF-8</parameter>
     <parameter key="kernel.container_class">App_KernelDevDebugContainer</parameter>
@@ -54,6 +59,11 @@
       <parameter key="Symfony\Component\Console\Event\ConsoleErrorEvent">console.error</parameter>
       <parameter key="Symfony\Component\Console\Event\ConsoleSignalEvent">console.signal</parameter>
       <parameter key="Symfony\Component\Console\Event\ConsoleTerminateEvent">console.terminate</parameter>
+      <parameter key="Symfony\Component\Form\Event\PreSubmitEvent">form.pre_submit</parameter>
+      <parameter key="Symfony\Component\Form\Event\SubmitEvent">form.submit</parameter>
+      <parameter key="Symfony\Component\Form\Event\PostSubmitEvent">form.post_submit</parameter>
+      <parameter key="Symfony\Component\Form\Event\PreSetDataEvent">form.pre_set_data</parameter>
+      <parameter key="Symfony\Component\Form\Event\PostSetDataEvent">form.post_set_data</parameter>
       <parameter key="Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent">kernel.controller_arguments</parameter>
       <parameter key="Symfony\Component\HttpKernel\Event\ControllerEvent">kernel.controller</parameter>
       <parameter key="Symfony\Component\HttpKernel\Event\ResponseEvent">kernel.response</parameter>
@@ -94,6 +104,7 @@
     </parameter>
     <parameter key="session.save_path">/var/www/symfony6.1/var/cache/dev/sessions</parameter>
     <parameter key="session.metadata.update_threshold">0</parameter>
+    <parameter key="form.type_extension.csrf.enabled">false</parameter>
     <parameter key="validator.mapping.cache.file">/var/www/symfony6.1/var/cache/dev/validation.php</parameter>
     <parameter key="validator.translation_domain">validators</parameter>
     <parameter key="data_collector.templates" type="collection"/>
@@ -171,6 +182,24 @@
     <parameter key="doctrine.orm.proxy_namespace">Proxies</parameter>
     <parameter key="doctrine.migrations.preferred_em">null</parameter>
     <parameter key="doctrine.migrations.preferred_connection">null</parameter>
+    <parameter key="monolog.use_microseconds">true</parameter>
+    <parameter key="monolog.swift_mailer.handlers" type="collection"/>
+    <parameter key="monolog.handlers_to_channels" type="collection">
+      <parameter key="monolog.handler.console" type="collection">
+        <parameter key="type">exclusive</parameter>
+        <parameter key="elements" type="collection">
+          <parameter>event</parameter>
+          <parameter>doctrine</parameter>
+          <parameter>console</parameter>
+        </parameter>
+      </parameter>
+      <parameter key="monolog.handler.main" type="collection">
+        <parameter key="type">exclusive</parameter>
+        <parameter key="elements" type="collection">
+          <parameter>event</parameter>
+        </parameter>
+      </parameter>
+    </parameter>
     <parameter key="console.command.ids" type="collection"/>
   </parameters>
   <services>
@@ -178,6 +207,15 @@
     <service id="kernel" class="App\Kernel" public="true" synthetic="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="routing.route_loader"/>
+    </service>
+    <service id="nyholm.psr7.psr17_factory" class="Nyholm\Psr7\Factory\Psr17Factory"/>
+    <service id="nyholm.psr7.httplug_factory" class="Nyholm\Psr7\Factory\HttplugFactory"/>
+    <service id="Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory" class="Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory" autowire="true" autoconfigure="true"/>
+    <service id="Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory" class="Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory" autowire="true" autoconfigure="true">
+      <argument type="service" id="nyholm.psr7.psr17_factory"/>
+      <argument type="service" id="nyholm.psr7.psr17_factory"/>
+      <argument type="service" id="nyholm.psr7.psr17_factory"/>
+      <argument type="service" id="nyholm.psr7.psr17_factory"/>
     </service>
     <service id="App\Controller\EmployeeController" class="App\Controller\EmployeeController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
@@ -193,11 +231,32 @@
         <argument type="service" id=".service_locator.jIxfAsi.App\Controller\ExampleController"/>
       </call>
     </service>
+    <service id="App\Controller\InjectedController" class="App\Controller\InjectedController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.jIxfAsi.App\Controller\InjectedController"/>
+      </call>
+    </service>
     <service id="App\Controller\MessageController" class="App\Controller\MessageController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.jIxfAsi.App\Controller\MessageController"/>
+      </call>
+    </service>
+    <service id="App\Controller\ServiceExample" class="App\Controller\ServiceExample" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.jIxfAsi.App\Controller\ServiceExample"/>
+      </call>
+    </service>
+    <service id="App\Controller\ServiceExample2" class="App\Controller\ServiceExample2" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.jIxfAsi.App\Controller\ServiceExample2"/>
       </call>
     </service>
     <service id="App\Controller\TableExampleController" class="App\Controller\TableExampleController" public="true" autowire="true" autoconfigure="true">
@@ -218,6 +277,14 @@
     <service id="App\Repository\SymfonyExampleRepository" class="App\Repository\SymfonyExampleRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Service\Example" class="App\Service\Example" autowire="true" autoconfigure="true"/>
+    <service id="App\Service\LoggerService" class="App\Service\LoggerService" autowire="true" autoconfigure="true">
+      <argument type="service" id="monolog.logger"/>
+    </service>
+    <service id="App\Service\MergeService" class="App\Service\MergeService" autowire="true" autoconfigure="true">
+      <argument type="service" id="App\Service\Example"/>
+      <argument type="service" id="monolog.logger"/>
     </service>
     <service id="App\Service\MixRepository" class="App\Service\MixRepository" autowire="true" autoconfigure="true"/>
     <service id="App\Validator\EmployeeInformation" class="App\Validator\EmployeeInformation" autowire="true" autoconfigure="true"/>
@@ -261,7 +328,7 @@
       <tag name="container.hot_path"/>
       <tag name="container.hot_path"/>
       <argument>error_controller</argument>
-      <argument type="service" id="logger" on-invalid="null"/>
+      <argument type="service" id="monolog.logger.request" on-invalid="null"/>
       <argument>true</argument>
       <argument type="collection"/>
     </service>
@@ -329,11 +396,17 @@
         <argument key="cache.serializer" type="service" id="cache.serializer" on-invalid="ignore_uninitialized"/>
         <argument key="cache.annotations" type="service" id="cache.annotations" on-invalid="ignore_uninitialized"/>
         <argument key="cache.property_info" type="service" id="cache.property_info" on-invalid="ignore_uninitialized"/>
+        <argument key="mailer.message_logger_listener" type="service" id="mailer.message_logger_listener" on-invalid="ignore_uninitialized"/>
         <argument key="debug.stopwatch" type="service" id="debug.stopwatch" on-invalid="ignore_uninitialized"/>
         <argument key="debug.event_dispatcher" type="service" id="debug.event_dispatcher" on-invalid="ignore_uninitialized"/>
         <argument key="session_listener" type="service" id="session_listener" on-invalid="ignore_uninitialized"/>
+        <argument key="form.choice_list_factory.cached" type="service" id="form.choice_list_factory.cached" on-invalid="ignore_uninitialized"/>
         <argument key="cache.validator_expression_language" type="service" id="cache.validator_expression_language" on-invalid="ignore_uninitialized"/>
+        <argument key="twig.form.engine" type="service" id="twig.form.engine" on-invalid="ignore_uninitialized"/>
         <argument key="doctrine" type="service" id="doctrine" on-invalid="ignore_uninitialized"/>
+        <argument key="form.type.entity" type="service" id="form.type.entity" on-invalid="ignore_uninitialized"/>
+        <argument key="monolog.handler.main" type="service" id="monolog.handler.main" on-invalid="ignore_uninitialized"/>
+        <argument key="monolog.handler.console" type="service" id="monolog.handler.console" on-invalid="ignore_uninitialized"/>
       </argument>
       <argument type="collection">
         <argument key="cache.app" type="collection">
@@ -354,6 +427,9 @@
         <argument key="cache.property_info" type="collection">
           <argument>reset</argument>
         </argument>
+        <argument key="mailer.message_logger_listener" type="collection">
+          <argument>reset</argument>
+        </argument>
         <argument key="debug.stopwatch" type="collection">
           <argument>reset</argument>
         </argument>
@@ -363,10 +439,25 @@
         <argument key="session_listener" type="collection">
           <argument>reset</argument>
         </argument>
+        <argument key="form.choice_list_factory.cached" type="collection">
+          <argument>reset</argument>
+        </argument>
         <argument key="cache.validator_expression_language" type="collection">
           <argument>reset</argument>
         </argument>
+        <argument key="twig.form.engine" type="collection">
+          <argument>reset</argument>
+        </argument>
         <argument key="doctrine" type="collection">
+          <argument>reset</argument>
+        </argument>
+        <argument key="form.type.entity" type="collection">
+          <argument>reset</argument>
+        </argument>
+        <argument key="monolog.handler.main" type="collection">
+          <argument>reset</argument>
+        </argument>
+        <argument key="monolog.handler.console" type="collection">
           <argument>reset</argument>
         </argument>
       </argument>
@@ -416,7 +507,7 @@
     <service id="config_builder.warmer" class="Symfony\Bundle\FrameworkBundle\CacheWarmer\ConfigBuilderCacheWarmer">
       <tag name="kernel.cache_warmer"/>
       <argument type="service" id="kernel"/>
-      <argument type="service" id="logger" on-invalid="null"/>
+      <argument type="service" id="monolog.logger" on-invalid="null"/>
     </service>
     <service id="fragment.handler" class="Symfony\Component\HttpKernel\DependencyInjection\LazyLoadingFragmentHandler">
       <argument type="service" id=".service_locator.lLv4pWF"/>
@@ -453,13 +544,13 @@
           <factory class="Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer" method="getAndCleanOutputBuffer"/>
         </service>
       </argument>
-      <argument type="service" id="logger" on-invalid="null"/>
+      <argument type="service" id="monolog.logger" on-invalid="null"/>
     </service>
     <service id="console.error_listener" class="Symfony\Component\Console\EventListener\ErrorListener">
       <tag name="kernel.event_subscriber"/>
       <tag name="monolog.logger" channel="console"/>
       <tag name="container.no_preload"/>
-      <argument type="service" id="logger" on-invalid="null"/>
+      <argument type="service" id="monolog.logger.console" on-invalid="null"/>
     </service>
     <service id="console.suggest_missing_package_subscriber" class="Symfony\Bundle\FrameworkBundle\EventListener\SuggestMissingPackageSubscriber">
       <tag name="kernel.event_subscriber"/>
@@ -717,6 +808,40 @@
         <argument>Lint a YAML file and outputs encountered errors</argument>
       </call>
     </service>
+    <service id="console.command.form_debug" class="Symfony\Component\Form\Command\DebugCommand">
+      <tag name="console.command"/>
+      <tag name="container.no_preload"/>
+      <argument type="service" id="form.registry"/>
+      <argument type="collection">
+        <argument>Symfony\Component\Form\Extension\Core\Type</argument>
+        <argument>Symfony\Bridge\Doctrine\Form\Type</argument>
+      </argument>
+      <argument type="collection">
+        <argument>Symfony\Component\Form\Extension\Core\Type\FormType</argument>
+        <argument>Symfony\Component\Form\Extension\Core\Type\ChoiceType</argument>
+        <argument>Symfony\Component\Form\Extension\Core\Type\FileType</argument>
+        <argument>Symfony\Component\Form\Extension\Core\Type\ColorType</argument>
+        <argument>Symfony\Bridge\Doctrine\Form\Type\EntityType</argument>
+      </argument>
+      <argument type="collection">
+        <argument>Symfony\Component\Form\Extension\Core\Type\TransformationFailureExtension</argument>
+        <argument>Symfony\Component\Form\Extension\HttpFoundation\Type\FormTypeHttpFoundationExtension</argument>
+        <argument>Symfony\Component\Form\Extension\Validator\Type\FormTypeValidatorExtension</argument>
+        <argument>Symfony\Component\Form\Extension\Validator\Type\RepeatedTypeValidatorExtension</argument>
+        <argument>Symfony\Component\Form\Extension\Validator\Type\SubmitTypeValidatorExtension</argument>
+      </argument>
+      <argument type="collection">
+        <argument>Symfony\Component\Form\Extension\Validator\ValidatorTypeGuesser</argument>
+        <argument>Symfony\Bridge\Doctrine\Form\DoctrineOrmTypeGuesser</argument>
+      </argument>
+      <argument type="service" id="debug.file_link_formatter" on-invalid="null"/>
+      <call method="setName">
+        <argument>debug:form</argument>
+      </call>
+      <call method="setDescription">
+        <argument>Display form type information</argument>
+      </call>
+    </service>
     <service id="console.command.secrets_set" class="Symfony\Bundle\FrameworkBundle\Command\SecretsSetCommand">
       <tag name="console.command"/>
       <tag name="container.no_preload"/>
@@ -797,7 +922,7 @@
       <argument>/var/www/symfony6.1/var/cache/dev/pools/app</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
-        <argument type="service" id="logger" on-invalid="ignore"/>
+        <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       </call>
     </service>
     <service id="cache.app.taggable" class="Symfony\Component\Cache\Adapter\TagAwareAdapter">
@@ -811,7 +936,7 @@
       <argument>0</argument>
       <argument>%container.build_id%</argument>
       <argument>/var/www/symfony6.1/var/cache/dev/pools/system</argument>
-      <argument type="service" id="logger" on-invalid="ignore"/>
+      <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.validator" class="Symfony\Component\Cache\Adapter\AdapterInterface">
@@ -821,7 +946,7 @@
       <argument>0</argument>
       <argument>%container.build_id%</argument>
       <argument>/var/www/symfony6.1/var/cache/dev/pools/system</argument>
-      <argument type="service" id="logger" on-invalid="ignore"/>
+      <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.serializer" class="Symfony\Component\Cache\Adapter\AdapterInterface">
@@ -831,7 +956,7 @@
       <argument>0</argument>
       <argument>%container.build_id%</argument>
       <argument>/var/www/symfony6.1/var/cache/dev/pools/system</argument>
-      <argument type="service" id="logger" on-invalid="ignore"/>
+      <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.annotations" class="Symfony\Component\Cache\Adapter\AdapterInterface">
@@ -841,7 +966,7 @@
       <argument>0</argument>
       <argument>%container.build_id%</argument>
       <argument>/var/www/symfony6.1/var/cache/dev/pools/system</argument>
-      <argument type="service" id="logger" on-invalid="ignore"/>
+      <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.property_info" class="Symfony\Component\Cache\Adapter\AdapterInterface">
@@ -851,7 +976,7 @@
       <argument>0</argument>
       <argument>%container.build_id%</argument>
       <argument>/var/www/symfony6.1/var/cache/dev/pools/system</argument>
-      <argument type="service" id="logger" on-invalid="ignore"/>
+      <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.adapter.system" class="Symfony\Component\Cache\Adapter\AdapterInterface" abstract="true">
@@ -861,7 +986,7 @@
       <argument>0</argument>
       <argument>%container.build_id%</argument>
       <argument>/var/www/symfony6.1/var/cache/dev/pools/system</argument>
-      <argument type="service" id="logger" on-invalid="ignore"/>
+      <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.adapter.apcu" class="Symfony\Component\Cache\Adapter\ApcuAdapter" abstract="true">
@@ -871,7 +996,7 @@
       <argument>0</argument>
       <argument>%container.build_id%</argument>
       <call method="setLogger">
-        <argument type="service" id="logger" on-invalid="ignore"/>
+        <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       </call>
     </service>
     <service id="cache.adapter.filesystem" class="Symfony\Component\Cache\Adapter\FilesystemAdapter" abstract="true">
@@ -882,7 +1007,7 @@
       <argument>/var/www/symfony6.1/var/cache/dev/pools/app</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
-        <argument type="service" id="logger" on-invalid="ignore"/>
+        <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       </call>
     </service>
     <service id="cache.adapter.psr6" class="Symfony\Component\Cache\Adapter\ProxyAdapter" abstract="true">
@@ -899,7 +1024,7 @@
       <argument>0</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
-        <argument type="service" id="logger" on-invalid="ignore"/>
+        <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       </call>
     </service>
     <service id="cache.adapter.redis_tag_aware" class="Symfony\Component\Cache\Adapter\RedisTagAwareAdapter" abstract="true">
@@ -910,7 +1035,7 @@
       <argument>0</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
-        <argument type="service" id="logger" on-invalid="ignore"/>
+        <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       </call>
     </service>
     <service id="cache.adapter.memcached" class="Symfony\Component\Cache\Adapter\MemcachedAdapter" abstract="true">
@@ -921,7 +1046,7 @@
       <argument>0</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
-        <argument type="service" id="logger" on-invalid="ignore"/>
+        <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       </call>
     </service>
     <service id="cache.adapter.doctrine_dbal" class="Symfony\Component\Cache\Adapter\DoctrineDbalAdapter" abstract="true">
@@ -933,7 +1058,7 @@
       <argument type="collection"/>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
-        <argument type="service" id="logger" on-invalid="ignore"/>
+        <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       </call>
     </service>
     <service id="cache.adapter.pdo" class="Symfony\Component\Cache\Adapter\PdoAdapter" abstract="true">
@@ -945,7 +1070,7 @@
       <argument type="collection"/>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
-        <argument type="service" id="logger" on-invalid="ignore"/>
+        <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       </call>
     </service>
     <service id="cache.adapter.array" class="Symfony\Component\Cache\Adapter\ArrayAdapter" abstract="true">
@@ -953,7 +1078,7 @@
       <tag name="monolog.logger" channel="cache"/>
       <argument>0</argument>
       <call method="setLogger">
-        <argument type="service" id="logger" on-invalid="ignore"/>
+        <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       </call>
     </service>
     <service id="cache.default_marshaller" class="Symfony\Component\Cache\Marshaller\DefaultMarshaller">
@@ -1037,17 +1162,78 @@
       <argument type="service" id="assets.empty_version_strategy"/>
       <argument type="service" id="assets.context"/>
     </service>
+    <service id="mailer.mailer" class="Symfony\Component\Mailer\Mailer">
+      <argument type="service" id="mailer.transports"/>
+      <argument>null</argument>
+      <argument type="service" id="debug.event_dispatcher" on-invalid="ignore"/>
+    </service>
+    <service id="mailer.transports" class="Symfony\Component\Mailer\Transport\Transports">
+      <argument type="collection">
+        <argument key="main">%env(MAILER_DSN)%</argument>
+      </argument>
+      <factory service="mailer.transport_factory" method="fromStrings"/>
+    </service>
+    <service id="mailer.transport_factory" class="Symfony\Component\Mailer\Transport">
+      <argument type="tagged_iterator" tag="mailer.transport_factory"/>
+    </service>
+    <service id="mailer.default_transport" class="Symfony\Component\Mailer\Transport\TransportInterface">
+      <argument>%env(MAILER_DSN)%</argument>
+      <factory service="mailer.transport_factory" method="fromString"/>
+    </service>
+    <service id="mailer.messenger.message_handler" class="Symfony\Component\Mailer\Messenger\MessageHandler">
+      <tag name="messenger.message_handler"/>
+      <argument type="service" id="mailer.transports"/>
+    </service>
+    <service id="mailer.envelope_listener" class="Symfony\Component\Mailer\EventListener\EnvelopeListener">
+      <tag name="kernel.event_subscriber"/>
+      <argument>null</argument>
+      <argument>null</argument>
+    </service>
+    <service id="mailer.message_logger_listener" class="Symfony\Component\Mailer\EventListener\MessageLoggerListener">
+      <tag name="kernel.event_subscriber"/>
+      <tag name="kernel.reset" method="reset"/>
+    </service>
+    <service id="mailer.transport_factory.abstract" class="Symfony\Component\Mailer\Transport\AbstractTransportFactory" abstract="true">
+      <tag name="monolog.logger" channel="mailer"/>
+      <argument type="service" id="debug.event_dispatcher"/>
+      <argument type="service" id="http_client" on-invalid="ignore"/>
+      <argument type="service" id="monolog.logger.mailer" on-invalid="ignore"/>
+    </service>
+    <service id="mailer.transport_factory.null" class="Symfony\Component\Mailer\Transport\NullTransportFactory">
+      <tag name="mailer.transport_factory"/>
+      <argument type="service" id="debug.event_dispatcher"/>
+      <argument>null</argument>
+      <argument type="service" id="monolog.logger.mailer" on-invalid="ignore"/>
+    </service>
+    <service id="mailer.transport_factory.sendmail" class="Symfony\Component\Mailer\Transport\SendmailTransportFactory">
+      <tag name="mailer.transport_factory"/>
+      <argument type="service" id="debug.event_dispatcher"/>
+      <argument>null</argument>
+      <argument type="service" id="monolog.logger.mailer" on-invalid="ignore"/>
+    </service>
+    <service id="mailer.transport_factory.smtp" class="Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory">
+      <tag name="mailer.transport_factory" priority="-100"/>
+      <argument type="service" id="debug.event_dispatcher"/>
+      <argument>null</argument>
+      <argument type="service" id="monolog.logger.mailer" on-invalid="ignore"/>
+    </service>
+    <service id="mailer.transport_factory.native" class="Symfony\Component\Mailer\Transport\NativeTransportFactory">
+      <tag name="mailer.transport_factory"/>
+      <argument type="service" id="debug.event_dispatcher"/>
+      <argument>null</argument>
+      <argument type="service" id="monolog.logger.mailer" on-invalid="ignore"/>
+    </service>
     <service id="debug.debug_handlers_listener" class="Symfony\Component\HttpKernel\EventListener\DebugHandlersListener">
       <tag name="kernel.event_subscriber"/>
       <tag name="monolog.logger" channel="php"/>
       <tag name="container.hot_path"/>
       <argument>null</argument>
-      <argument>null</argument>
+      <argument type="service" id="monolog.logger.php" on-invalid="null"/>
       <argument>null</argument>
       <argument>-1</argument>
       <argument>true</argument>
       <argument>true</argument>
-      <argument>null</argument>
+      <argument type="service" id="monolog.logger.deprecation" on-invalid="null"/>
     </service>
     <service id="debug.file_link_formatter" class="Symfony\Component\HttpKernel\Debug\FileLinkFormatter">
       <argument>%env(default::SYMFONY_IDE)%</argument>
@@ -1063,7 +1249,7 @@
       <tag name="kernel.reset" method="reset"/>
       <argument type="service" id="debug.event_dispatcher.inner"/>
       <argument type="service" id="debug.stopwatch"/>
-      <argument type="service" id="logger" on-invalid="null"/>
+      <argument type="service" id="monolog.logger.event" on-invalid="null"/>
       <argument type="service" id="request_stack" on-invalid="null"/>
       <call method="addListener">
         <argument>kernel.response</argument>
@@ -1186,6 +1372,22 @@
         <argument>0</argument>
       </call>
       <call method="addListener">
+        <argument>Symfony\Component\Mailer\Event\MessageEvent</argument>
+        <argument type="collection">
+          <argument type="service_closure" id="mailer.envelope_listener"/>
+          <argument>onMessage</argument>
+        </argument>
+        <argument>-255</argument>
+      </call>
+      <call method="addListener">
+        <argument>Symfony\Component\Mailer\Event\MessageEvent</argument>
+        <argument type="collection">
+          <argument type="service_closure" id="mailer.message_logger_listener"/>
+          <argument>onMessage</argument>
+        </argument>
+        <argument>-255</argument>
+      </call>
+      <call method="addListener">
         <argument>kernel.request</argument>
         <argument type="collection">
           <argument type="service_closure" id="debug.debug_handlers_listener"/>
@@ -1298,6 +1500,14 @@
         <argument>0</argument>
       </call>
       <call method="addListener">
+        <argument>Symfony\Component\Mailer\Event\MessageEvent</argument>
+        <argument type="collection">
+          <argument type="service_closure" id="twig.mailer.message_listener"/>
+          <argument>onMessage</argument>
+        </argument>
+        <argument>0</argument>
+      </call>
+      <call method="addListener">
         <argument>console.error</argument>
         <argument type="collection">
           <argument type="service_closure" id="maker.console_error_listener"/>
@@ -1313,6 +1523,22 @@
         </argument>
         <argument>0</argument>
       </call>
+      <call method="addListener">
+        <argument>console.command</argument>
+        <argument type="collection">
+          <argument type="service_closure" id="monolog.handler.console"/>
+          <argument>onCommand</argument>
+        </argument>
+        <argument>255</argument>
+      </call>
+      <call method="addListener">
+        <argument>console.terminate</argument>
+        <argument type="collection">
+          <argument type="service_closure" id="monolog.handler.console"/>
+          <argument>onTerminate</argument>
+        </argument>
+        <argument>-255</argument>
+      </call>
     </service>
     <service id="debug.controller_resolver" class="Symfony\Component\HttpKernel\Controller\TraceableControllerResolver">
       <tag name="monolog.logger" channel="request"/>
@@ -1322,6 +1548,9 @@
     <service id="debug.argument_resolver" class="Symfony\Component\HttpKernel\Controller\TraceableArgumentResolver">
       <argument type="service" id="debug.argument_resolver.inner"/>
       <argument type="service" id="debug.stopwatch"/>
+    </service>
+    <service id="debug.log_processor" class="Symfony\Bridge\Monolog\Processor\DebugProcessor">
+      <argument type="service" id="request_stack"/>
     </service>
     <service id="routing.resolver" class="Symfony\Component\Config\Loader\LoaderResolver">
       <call method="addLoader">
@@ -1392,7 +1621,7 @@
     <service id="router.default" class="Symfony\Bundle\FrameworkBundle\Routing\Router">
       <tag name="monolog.logger" channel="router"/>
       <tag name="container.service_subscriber" id="routing.loader"/>
-      <argument type="service" id=".service_locator.UxjivMC.router.default"/>
+      <argument type="service" id=".service_locator.LeJjUB..router.default"/>
       <argument>kernel::loadRoutes</argument>
       <argument type="collection">
         <argument key="cache_dir">/var/www/symfony6.1/var/cache/dev</argument>
@@ -1406,7 +1635,7 @@
       </argument>
       <argument type="service" id="router.request_context" on-invalid="ignore"/>
       <argument type="service" id="parameter_bag" on-invalid="ignore"/>
-      <argument type="service" id="logger" on-invalid="ignore"/>
+      <argument type="service" id="monolog.logger.router" on-invalid="ignore"/>
       <argument>en</argument>
       <call method="setConfigCacheFactory">
         <argument type="service" id="config_cache_factory"/>
@@ -1444,7 +1673,7 @@
       <argument type="service" id="router.default"/>
       <argument type="service" id="request_stack"/>
       <argument type="service" id="router.request_context" on-invalid="ignore"/>
-      <argument type="service" id="logger" on-invalid="ignore"/>
+      <argument type="service" id="monolog.logger.request" on-invalid="ignore"/>
       <argument>/var/www/symfony6.1</argument>
       <argument>true</argument>
     </service>
@@ -1518,6 +1747,13 @@
       <argument type="service" id="cache.annotations"/>
       <factory class="Symfony\Component\Cache\Adapter\PhpArrayAdapter" method="create"/>
     </service>
+    <service id="property_accessor" class="Symfony\Component\PropertyAccess\PropertyAccessor">
+      <argument>3</argument>
+      <argument>2</argument>
+      <argument type="service" id="cache.property_access" on-invalid="ignore"/>
+      <argument type="service" id="property_info.reflection_extractor" on-invalid="null"/>
+      <argument type="service" id="property_info.reflection_extractor" on-invalid="null"/>
+    </service>
     <service id="secrets.vault" class="Symfony\Bundle\FrameworkBundle\Secrets\SodiumVault">
       <tag name="container.env_var_loader"/>
       <argument>/var/www/symfony6.1/config/secrets/%env(default:kernel.environment:APP_RUNTIME_ENV)%</argument>
@@ -1530,6 +1766,30 @@
     </service>
     <service id="secrets.local_vault" class="Symfony\Bundle\FrameworkBundle\Secrets\DotenvVault">
       <argument>/var/www/symfony6.1/.env.dev.local</argument>
+    </service>
+    <service id="property_info" class="Symfony\Component\PropertyInfo\PropertyInfoExtractor">
+      <argument type="iterator">
+        <argument type="service" id="property_info.reflection_extractor"/>
+        <argument type="service" id="doctrine.orm.default_entity_manager.property_info_extractor"/>
+      </argument>
+      <argument type="iterator">
+        <argument type="service" id="doctrine.orm.default_entity_manager.property_info_extractor"/>
+        <argument type="service" id="property_info.reflection_extractor"/>
+      </argument>
+      <argument type="iterator"/>
+      <argument type="iterator">
+        <argument type="service" id="doctrine.orm.default_entity_manager.property_info_extractor"/>
+        <argument type="service" id="property_info.reflection_extractor"/>
+      </argument>
+      <argument type="iterator">
+        <argument type="service" id="property_info.reflection_extractor"/>
+      </argument>
+    </service>
+    <service id="property_info.reflection_extractor" class="Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor">
+      <tag name="property_info.list_extractor" priority="-1000"/>
+      <tag name="property_info.type_extractor" priority="-1002"/>
+      <tag name="property_info.access_extractor" priority="-1000"/>
+      <tag name="property_info.initializable_extractor" priority="-1000"/>
     </service>
     <service id=".cache_connection.GD_MSZC" class="Symfony\Component\Cache\Adapter\AbstractAdapter">
       <argument>redis://localhost</argument>
@@ -1544,6 +1804,10 @@
         <argument key="lazy">true</argument>
       </argument>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createConnection"/>
+    </service>
+    <service id="cache.property_access" class="Symfony\Component\Cache\Adapter\ArrayAdapter">
+      <argument>0</argument>
+      <argument>false</argument>
     </service>
     <service id="session.factory" class="Symfony\Component\HttpFoundation\Session\SessionFactory">
       <argument type="service" id="request_stack"/>
@@ -1606,6 +1870,93 @@
       <argument>%session.storage.options%</argument>
     </service>
     <service id="session.marshaller" class="Symfony\Component\HttpFoundation\Session\Storage\Handler\IdentityMarshaller"/>
+    <service id="form.resolved_type_factory" class="Symfony\Component\Form\ResolvedFormTypeFactory"/>
+    <service id="form.registry" class="Symfony\Component\Form\FormRegistry">
+      <argument type="collection">
+        <argument type="service" id="form.extension"/>
+      </argument>
+      <argument type="service" id="form.resolved_type_factory"/>
+    </service>
+    <service id="form.factory" class="Symfony\Component\Form\FormFactory">
+      <argument type="service" id="form.registry"/>
+    </service>
+    <service id="form.extension" class="Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension">
+      <argument type="service" id=".service_locator.y4dplYt"/>
+      <argument type="collection">
+        <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="iterator">
+          <argument type="service" id="form.type_extension.form.transformation_failure_handling"/>
+          <argument type="service" id="form.type_extension.form.http_foundation"/>
+          <argument type="service" id="form.type_extension.form.validator"/>
+        </argument>
+        <argument key="Symfony\Component\Form\Extension\Core\Type\RepeatedType" type="iterator">
+          <argument type="service" id="form.type_extension.repeated.validator"/>
+        </argument>
+        <argument key="Symfony\Component\Form\Extension\Core\Type\SubmitType" type="iterator">
+          <argument type="service" id="form.type_extension.submit.validator"/>
+        </argument>
+      </argument>
+      <argument type="iterator">
+        <argument type="service" id="form.type_guesser.validator"/>
+        <argument type="service" id="form.type_guesser.doctrine"/>
+      </argument>
+    </service>
+    <service id="form.type_guesser.validator" class="Symfony\Component\Form\Extension\Validator\ValidatorTypeGuesser">
+      <tag name="form.type_guesser"/>
+      <argument type="service" id="validator"/>
+    </service>
+    <service id="form.choice_list_factory.default" class="Symfony\Component\Form\ChoiceList\Factory\DefaultChoiceListFactory"/>
+    <service id="form.choice_list_factory.property_access" class="Symfony\Component\Form\ChoiceList\Factory\PropertyAccessDecorator">
+      <argument type="service" id="form.choice_list_factory.default"/>
+      <argument type="service" id="property_accessor"/>
+    </service>
+    <service id="form.choice_list_factory.cached" class="Symfony\Component\Form\ChoiceList\Factory\CachingFactoryDecorator">
+      <tag name="kernel.reset" method="reset"/>
+      <argument type="service" id="form.choice_list_factory.property_access"/>
+    </service>
+    <service id="form.type.form" class="Symfony\Component\Form\Extension\Core\Type\FormType">
+      <tag name="form.type"/>
+      <argument type="service" id="property_accessor"/>
+    </service>
+    <service id="form.type.choice" class="Symfony\Component\Form\Extension\Core\Type\ChoiceType">
+      <tag name="form.type"/>
+      <argument type="service" id="form.choice_list_factory.cached"/>
+      <argument>null</argument>
+    </service>
+    <service id="form.type.file" class="Symfony\Component\Form\Extension\Core\Type\FileType">
+      <tag name="form.type"/>
+      <argument>null</argument>
+    </service>
+    <service id="form.type.color" class="Symfony\Component\Form\Extension\Core\Type\ColorType">
+      <tag name="form.type"/>
+      <argument>null</argument>
+    </service>
+    <service id="form.type_extension.form.transformation_failure_handling" class="Symfony\Component\Form\Extension\Core\Type\TransformationFailureExtension">
+      <tag name="form.type_extension" extended-type="Symfony\Component\Form\Extension\Core\Type\FormType"/>
+      <argument>null</argument>
+    </service>
+    <service id="form.type_extension.form.http_foundation" class="Symfony\Component\Form\Extension\HttpFoundation\Type\FormTypeHttpFoundationExtension">
+      <tag name="form.type_extension"/>
+      <argument type="service" id="form.type_extension.form.request_handler"/>
+    </service>
+    <service id="form.type_extension.form.request_handler" class="Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationRequestHandler">
+      <argument type="service" id="form.server_params"/>
+    </service>
+    <service id="form.server_params" class="Symfony\Component\Form\Util\ServerParams">
+      <argument type="service" id="request_stack"/>
+    </service>
+    <service id="form.type_extension.form.validator" class="Symfony\Component\Form\Extension\Validator\Type\FormTypeValidatorExtension">
+      <tag name="form.type_extension" extended-type="Symfony\Component\Form\Extension\Core\Type\FormType"/>
+      <argument type="service" id="validator"/>
+      <argument>false</argument>
+      <argument type="service" id="twig.form.renderer" on-invalid="ignore"/>
+      <argument>null</argument>
+    </service>
+    <service id="form.type_extension.repeated.validator" class="Symfony\Component\Form\Extension\Validator\Type\RepeatedTypeValidatorExtension">
+      <tag name="form.type_extension"/>
+    </service>
+    <service id="form.type_extension.submit.validator" class="Symfony\Component\Form\Extension\Validator\Type\SubmitTypeValidatorExtension">
+      <tag name="form.type_extension" extended-type="Symfony\Component\Form\Extension\Core\Type\SubmitType"/>
+    </service>
     <service id="validator" class="Symfony\Component\Validator\Validator\ValidatorInterface">
       <factory service="validator.builder" method="getValidator"/>
     </service>
@@ -1615,6 +1966,11 @@
       </call>
       <call method="setTranslationDomain">
         <argument>validators</argument>
+      </call>
+      <call method="addXmlMappings">
+        <argument type="collection">
+          <argument>/var/www/symfony6.1/vendor/symfony/form/Resources/config/validation.xml</argument>
+        </argument>
       </call>
       <call method="enableAnnotationMapping">
         <argument>true</argument>
@@ -1629,6 +1985,9 @@
         <argument type="collection">
           <argument type="service" id="doctrine.orm.validator_initializer"/>
         </argument>
+      </call>
+      <call method="addLoader">
+        <argument type="service" id="validator.property_info_loader"/>
       </call>
       <call method="addLoader">
         <argument type="service" id="doctrine.orm.default_entity_manager.validator_loader"/>
@@ -1662,7 +2021,7 @@
       <argument>0</argument>
       <argument>%container.build_id%</argument>
       <argument>/var/www/symfony6.1/var/cache/dev/pools/system</argument>
-      <argument type="service" id="logger" on-invalid="ignore"/>
+      <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="validator.email" class="Symfony\Component\Validator\Constraints\EmailValidator">
@@ -1675,6 +2034,18 @@
       <argument>UTF-8</argument>
       <argument>true</argument>
       <argument>null</argument>
+    </service>
+    <service id="validator.property_info_loader" class="Symfony\Component\Validator\Mapping\Loader\PropertyInfoLoader">
+      <tag name="validator.auto_mapper"/>
+      <argument type="service" id="property_info"/>
+      <argument type="service" id="property_info"/>
+      <argument type="service" id="property_info"/>
+      <argument>null</argument>
+    </service>
+    <service id="mime_types" class="Symfony\Component\Mime\MimeTypes">
+      <call method="setDefault">
+        <argument type="service" id="mime_types"/>
+      </call>
     </service>
     <service id="sensio_framework_extra.controller.listener" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\ControllerListener">
       <tag name="kernel.event_subscriber"/>
@@ -1782,6 +2153,9 @@
         <argument type="service" id="twig.extension.httpfoundation"/>
       </call>
       <call method="addExtension">
+        <argument type="service" id="twig.extension.form"/>
+      </call>
+      <call method="addExtension">
         <argument type="service" id="twig.extension.debug"/>
       </call>
       <call method="addExtension">
@@ -1827,7 +2201,10 @@
     </service>
     <service id="twig.template_iterator" class="Symfony\Bundle\TwigBundle\TemplateIterator">
       <argument type="service" id="kernel"/>
-      <argument type="collection"/>
+      <argument type="collection">
+        <argument key="/var/www/symfony6.1/vendor/symfony/twig-bridge/Resources/views/Email">email</argument>
+        <argument key="/var/www/symfony6.1/vendor/symfony/twig-bridge/Resources/views/Form">null</argument>
+      </argument>
       <argument>/var/www/symfony6.1/templates</argument>
       <argument type="collection"/>
     </service>
@@ -1859,6 +2236,17 @@
       </call>
       <call method="addPath">
         <argument>/var/www/symfony6.1/templates</argument>
+      </call>
+      <call method="addPath">
+        <argument>/var/www/symfony6.1/vendor/symfony/twig-bridge/Resources/views/Email</argument>
+        <argument>email</argument>
+      </call>
+      <call method="addPath">
+        <argument>/var/www/symfony6.1/vendor/symfony/twig-bridge/Resources/views/Email</argument>
+        <argument>!email</argument>
+      </call>
+      <call method="addPath">
+        <argument>/var/www/symfony6.1/vendor/symfony/twig-bridge/Resources/views/Form</argument>
       </call>
     </service>
     <service id="twig.loader.chain" class="Twig\Loader\ChainLoader"/>
@@ -1932,7 +2320,7 @@
       <argument>,</argument>
     </service>
     <service id="twig.runtime_loader" class="Twig\RuntimeLoader\ContainerRuntimeLoader">
-      <argument type="service" id=".service_locator.HJisze0"/>
+      <argument type="service" id=".service_locator.H84_pZM"/>
     </service>
     <service id="twig.error_renderer.html" class="Symfony\Bridge\Twig\ErrorRenderer\TwigErrorRenderer">
       <argument type="service" id="twig"/>
@@ -1949,6 +2337,20 @@
       <argument type="service" id="serializer"/>
     </service>
     <service id="twig.extension.serializer" class="Symfony\Bridge\Twig\Extension\SerializerExtension"/>
+    <service id="twig.extension.form" class="Symfony\Bridge\Twig\Extension\FormExtension">
+      <tag name="twig.extension"/>
+      <argument>null</argument>
+    </service>
+    <service id="twig.form.engine" class="Symfony\Bridge\Twig\Form\TwigRendererEngine">
+      <tag name="kernel.reset" method="reset"/>
+      <argument>%twig.form.resources%</argument>
+      <argument type="service" id="twig"/>
+    </service>
+    <service id="twig.form.renderer" class="Symfony\Component\Form\FormRenderer">
+      <tag name="twig.runtime"/>
+      <argument type="service" id="twig.form.engine"/>
+      <argument>null</argument>
+    </service>
     <service id="twig.command.debug" class="Symfony\Bridge\Twig\Command\DebugCommand">
       <tag name="console.command"/>
       <tag name="container.no_preload"/>
@@ -1977,6 +2379,14 @@
       <call method="setDescription">
         <argument>Lint a Twig template and outputs encountered errors</argument>
       </call>
+    </service>
+    <service id="twig.mailer.message_listener" class="Symfony\Component\Mailer\EventListener\MessageListener">
+      <tag name="kernel.event_subscriber"/>
+      <argument>null</argument>
+      <argument type="service" id="twig.mime_body_renderer"/>
+    </service>
+    <service id="twig.mime_body_renderer" class="Symfony\Bridge\Twig\Mime\BodyRenderer">
+      <argument type="service" id="twig"/>
     </service>
     <service id="twig.missing_extension_suggestor" class="Twig\Extra\TwigExtraBundle\MissingExtensionSuggestor"/>
     <service id="doctrine.dbal.logger.chain" class="Doctrine\DBAL\Logging\LoggerChain" abstract="true"/>
@@ -2054,6 +2464,11 @@
       <call method="setMiddlewares">
         <argument type="collection">
           <argument type="service">
+            <service class="Doctrine\DBAL\Logging\Middleware">
+              <argument type="service" id="monolog.logger.doctrine"/>
+            </service>
+          </argument>
+          <argument type="service">
             <service class="Doctrine\Bundle\DoctrineBundle\Middleware\DebugMiddleware">
               <argument type="service" id="doctrine.debug_data_holder"/>
               <argument type="service" id="debug.stopwatch" on-invalid="null"/>
@@ -2106,6 +2521,11 @@
         </service>
       </argument>
     </service>
+    <service id="doctrine.dbal.logging_middleware" class="Doctrine\DBAL\Logging\Middleware" abstract="true">
+      <tag name="monolog.logger" channel="doctrine"/>
+      <tag name="doctrine.middleware" connection="default"/>
+      <argument type="service" id="monolog.logger.doctrine"/>
+    </service>
     <service id="doctrine.debug_data_holder" class="Doctrine\Bundle\DoctrineBundle\Middleware\BacktraceDebugDataHolder">
       <argument type="collection"/>
     </service>
@@ -2127,6 +2547,7 @@
     </service>
     <service id="form.type.entity" class="Symfony\Bridge\Doctrine\Form\Type\EntityType">
       <tag name="form.type" alias="entity"/>
+      <tag name="kernel.reset" method="reset"/>
       <argument type="service" id="doctrine"/>
     </service>
     <service id="doctrine.orm.configuration" class="Doctrine\ORM\Configuration" abstract="true"/>
@@ -2379,6 +2800,12 @@
       <factory class="Doctrine\ORM\EntityManager" method="create"/>
       <configurator service="doctrine.orm.default_manager_configurator" method="configure"/>
     </service>
+    <service id="doctrine.orm.default_entity_manager.property_info_extractor" class="Symfony\Bridge\Doctrine\PropertyInfo\DoctrineExtractor">
+      <tag name="property_info.list_extractor" priority="-1001"/>
+      <tag name="property_info.type_extractor" priority="-999"/>
+      <tag name="property_info.access_extractor" priority="-999"/>
+      <argument type="service" id="doctrine.orm.default_entity_manager"/>
+    </service>
     <service id="doctrine.orm.default_entity_manager.validator_loader" class="Symfony\Bridge\Doctrine\Validator\DoctrineLoader">
       <tag name="validator.auto_mapper" priority="-100"/>
       <argument type="service" id="doctrine.orm.default_entity_manager"/>
@@ -2387,7 +2814,7 @@
     <service id="doctrine.migrations.dependency_factory" class="Doctrine\Migrations\DependencyFactory">
       <argument type="service" id="doctrine.migrations.configuration_loader"/>
       <argument type="service" id="doctrine.migrations.entity_manager_registry_loader"/>
-      <argument type="service" id="logger" on-invalid="null"/>
+      <argument type="service" id="monolog.logger" on-invalid="null"/>
       <call method="setDefinition">
         <argument>Doctrine\Migrations\Version\MigrationFactory</argument>
         <argument type="service_closure" id="doctrine.migrations.container_aware_migrations_factory"/>
@@ -2717,15 +3144,77 @@
     <service id="maker.maker.make_stimulus_controller" class="Symfony\Bundle\MakerBundle\Maker\MakeStimulusController">
       <tag name="maker.command"/>
     </service>
+    <service id="monolog.logger" class="Symfony\Bridge\Monolog\Logger">
+      <argument>app</argument>
+      <call method="useMicrosecondTimestamps">
+        <argument>true</argument>
+      </call>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.console"/>
+      </call>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.main"/>
+      </call>
+    </service>
+    <service id="monolog.logger_prototype" class="Symfony\Bridge\Monolog\Logger" abstract="true">
+      <argument></argument>
+    </service>
+    <service id="monolog.activation_strategy.not_found" class="Symfony\Bridge\Monolog\Handler\FingersCrossed\NotFoundActivationStrategy" abstract="true"/>
+    <service id="monolog.handler.fingers_crossed.error_level_activation_strategy" class="Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy" abstract="true"/>
+    <service id="monolog.formatter.chrome_php" class="Monolog\Formatter\ChromePHPFormatter"/>
+    <service id="monolog.formatter.gelf_message" class="Monolog\Formatter\GelfMessageFormatter"/>
+    <service id="monolog.formatter.html" class="Monolog\Formatter\HtmlFormatter"/>
+    <service id="monolog.formatter.json" class="Monolog\Formatter\JsonFormatter"/>
+    <service id="monolog.formatter.line" class="Monolog\Formatter\LineFormatter"/>
+    <service id="monolog.formatter.loggly" class="Monolog\Formatter\LogglyFormatter"/>
+    <service id="monolog.formatter.normalizer" class="Monolog\Formatter\NormalizerFormatter"/>
+    <service id="monolog.formatter.scalar" class="Monolog\Formatter\ScalarFormatter"/>
+    <service id="monolog.formatter.wildfire" class="Monolog\Formatter\WildfireFormatter"/>
+    <service id="monolog.formatter.logstash" class="Monolog\Formatter\LogstashFormatter">
+      <argument>app</argument>
+    </service>
+    <service id="monolog.http_client" class="Symfony\Contracts\HttpClient\HttpClientInterface">
+      <factory class="Symfony\Component\HttpClient\HttpClient" method="create"/>
+    </service>
+    <service id="monolog.processor.psr_log_message" class="Monolog\Processor\PsrLogMessageProcessor"/>
+    <service id="monolog.handler.main" class="Monolog\Handler\StreamHandler">
+      <tag name="kernel.reset" method="reset"/>
+      <argument>/var/www/symfony6.1/var/log/dev.log</argument>
+      <argument>100</argument>
+      <argument>true</argument>
+      <argument>null</argument>
+      <argument>false</argument>
+      <call method="pushProcessor">
+        <argument type="service" id="monolog.processor.psr_log_message"/>
+      </call>
+    </service>
+    <service id="monolog.handler.console" class="Symfony\Bridge\Monolog\Handler\ConsoleHandler">
+      <tag name="kernel.event_subscriber"/>
+      <tag name="kernel.reset" method="reset"/>
+      <tag name="container.no_preload"/>
+      <argument>null</argument>
+      <argument>true</argument>
+      <argument type="collection"/>
+      <argument type="collection"/>
+    </service>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\EmployeeController" class="App\Controller\EmployeeController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\EmployeeController" class="App\Controller\EmployeeController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\EmployeeController" class="App\Controller\EmployeeController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\ExampleController" class="App\Controller\ExampleController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\ExampleController" class="App\Controller\ExampleController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\ExampleController" class="App\Controller\ExampleController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\InjectedController" class="App\Controller\InjectedController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\InjectedController" class="App\Controller\InjectedController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\InjectedController" class="App\Controller\InjectedController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\MessageController" class="App\Controller\MessageController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\MessageController" class="App\Controller\MessageController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\MessageController" class="App\Controller\MessageController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\ServiceExample" class="App\Controller\ServiceExample" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\ServiceExample" class="App\Controller\ServiceExample" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\ServiceExample" class="App\Controller\ServiceExample" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\ServiceExample2" class="App\Controller\ServiceExample2" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\ServiceExample2" class="App\Controller\ServiceExample2" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\ServiceExample2" class="App\Controller\ServiceExample2" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\TableExampleController" class="App\Controller\TableExampleController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\TableExampleController" class="App\Controller\TableExampleController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\TableExampleController" class="App\Controller\TableExampleController" autowire="true" autoconfigure="true" abstract="true"/>
@@ -3091,13 +3580,25 @@
         <argument key="doctrine" type="service_closure" id="doctrine"/>
       </argument>
     </service>
+    <service id=".service_locator.vq2DxCv" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="example" type="service_closure" id="App\Service\Example"/>
+      </argument>
+    </service>
+    <service id=".service_locator.V5GBaF0" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="merge" type="service_closure" id="App\Service\MergeService"/>
+      </argument>
+    </service>
     <service id=".service_locator.amLFGfE" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="record" type="service_closure" id=".errored..service_locator.amLFGfE.App\Entity\SymfonyExample"/>
       </argument>
     </service>
-    <service id=".service_locator.S5PPar9" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.5.2.qN." class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\EmployeeController::create" type="service_closure" id=".service_locator.6B_ZjHa"/>
@@ -3106,6 +3607,10 @@
         <argument key="App\Controller\EmployeeController::show" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\EmployeeController::showAll" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\EmployeeController::update" type="service_closure" id=".service_locator.GQZbvNR"/>
+        <argument key="App\Controller\ExampleController::new" type="service_closure" id=".service_locator.vq2DxCv"/>
+        <argument key="App\Controller\InjectedController::new" type="service_closure" id=".service_locator.V5GBaF0"/>
+        <argument key="App\Controller\ServiceExample2::new" type="service_closure" id=".service_locator.vq2DxCv"/>
+        <argument key="App\Controller\ServiceExample::new" type="service_closure" id=".service_locator.vq2DxCv"/>
         <argument key="App\Controller\TableExampleController::createRecord" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController::show" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController::shows" type="service_closure" id=".service_locator.amLFGfE"/>
@@ -3121,6 +3626,10 @@
         <argument key="App\Controller\EmployeeController:show" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\EmployeeController:showAll" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\EmployeeController:update" type="service_closure" id=".service_locator.GQZbvNR"/>
+        <argument key="App\Controller\ExampleController:new" type="service_closure" id=".service_locator.vq2DxCv"/>
+        <argument key="App\Controller\InjectedController:new" type="service_closure" id=".service_locator.V5GBaF0"/>
+        <argument key="App\Controller\ServiceExample2:new" type="service_closure" id=".service_locator.vq2DxCv"/>
+        <argument key="App\Controller\ServiceExample:new" type="service_closure" id=".service_locator.vq2DxCv"/>
         <argument key="App\Controller\TableExampleController:createRecord" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController:show" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController:shows" type="service_closure" id=".service_locator.amLFGfE"/>
@@ -3192,6 +3701,16 @@
       <argument type="service" id="debug.argument_resolver.not_tagged_controller.inner"/>
       <argument type="service" id="debug.stopwatch"/>
     </service>
+    <service id=".service_locator.y4dplYt" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="Symfony\Bridge\Doctrine\Form\Type\EntityType" type="service_closure" id="form.type.entity"/>
+        <argument key="Symfony\Component\Form\Extension\Core\Type\ChoiceType" type="service_closure" id="form.type.choice"/>
+        <argument key="Symfony\Component\Form\Extension\Core\Type\ColorType" type="service_closure" id="form.type.color"/>
+        <argument key="Symfony\Component\Form\Extension\Core\Type\FileType" type="service_closure" id="form.type.file"/>
+        <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="service_closure" id="form.type.form"/>
+      </argument>
+    </service>
     <service id=".service_locator.QXcJQkF" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -3219,6 +3738,9 @@
       <argument type="service" id=".doctrine.orm.default_metadata_driver.inner"/>
       <argument type="service" id=".service_locator.KLVvNIq"/>
     </service>
+    <service id="doctrine.dbal.logging_middleware.default" class="Doctrine\DBAL\Logging\Middleware">
+      <argument type="service" id="monolog.logger.doctrine"/>
+    </service>
     <service id="doctrine.dbal.debug_middleware.default" class="Doctrine\Bundle\DoctrineBundle\Middleware\DebugMiddleware">
       <argument type="service" id="doctrine.debug_data_holder"/>
       <argument type="service" id="debug.stopwatch" on-invalid="null"/>
@@ -3226,10 +3748,83 @@
         <argument>default</argument>
       </call>
     </service>
-    <service id="logger" class="Symfony\Component\HttpKernel\Log\Logger"/>
+    <service id="monolog.logger.request" class="Symfony\Bridge\Monolog\Logger">
+      <argument>request</argument>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.console"/>
+      </call>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.main"/>
+      </call>
+    </service>
+    <service id="monolog.logger.console" class="Symfony\Bridge\Monolog\Logger">
+      <argument>console</argument>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.main"/>
+      </call>
+    </service>
+    <service id="monolog.logger.cache" class="Symfony\Bridge\Monolog\Logger">
+      <argument>cache</argument>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.console"/>
+      </call>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.main"/>
+      </call>
+    </service>
+    <service id="monolog.logger.mailer" class="Symfony\Bridge\Monolog\Logger">
+      <argument>mailer</argument>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.console"/>
+      </call>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.main"/>
+      </call>
+    </service>
+    <service id="monolog.logger.php" class="Symfony\Bridge\Monolog\Logger">
+      <argument>php</argument>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.console"/>
+      </call>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.main"/>
+      </call>
+    </service>
+    <service id="monolog.logger.event" class="Symfony\Bridge\Monolog\Logger">
+      <argument>event</argument>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.null_internal"/>
+      </call>
+    </service>
+    <service id="monolog.logger.router" class="Symfony\Bridge\Monolog\Logger">
+      <argument>router</argument>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.console"/>
+      </call>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.main"/>
+      </call>
+    </service>
+    <service id="monolog.logger.doctrine" class="Symfony\Bridge\Monolog\Logger">
+      <argument>doctrine</argument>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.main"/>
+      </call>
+    </service>
+    <service id="monolog.logger.deprecation" class="Symfony\Bridge\Monolog\Logger" public="true">
+      <argument>deprecation</argument>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.console"/>
+      </call>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.main"/>
+      </call>
+    </service>
+    <service id="monolog.handler.null_internal" class="Monolog\Handler\NullHandler"/>
     <service id=".service_locator.jIxfAsi" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="form.factory" type="service_closure" id="form.factory" on-invalid="ignore"/>
         <argument key="http_kernel" type="service_closure" id="http_kernel" on-invalid="ignore"/>
         <argument key="parameter_bag" type="service_closure" id="parameter_bag" on-invalid="ignore"/>
         <argument key="request_stack" type="service_closure" id="request_stack" on-invalid="ignore"/>
@@ -3249,9 +3844,27 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.jIxfAsi" method="withContext"/>
     </service>
+    <service id=".service_locator.jIxfAsi.App\Controller\InjectedController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\InjectedController"/>
+      <argument>App\Controller\InjectedController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.jIxfAsi" method="withContext"/>
+    </service>
     <service id=".service_locator.jIxfAsi.App\Controller\MessageController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\MessageController"/>
       <argument>App\Controller\MessageController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.jIxfAsi" method="withContext"/>
+    </service>
+    <service id=".service_locator.jIxfAsi.App\Controller\ServiceExample" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\ServiceExample"/>
+      <argument>App\Controller\ServiceExample</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.jIxfAsi" method="withContext"/>
+    </service>
+    <service id=".service_locator.jIxfAsi.App\Controller\ServiceExample2" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\ServiceExample2"/>
+      <argument>App\Controller\ServiceExample2</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.jIxfAsi" method="withContext"/>
     </service>
@@ -3261,17 +3874,17 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.jIxfAsi" method="withContext"/>
     </service>
-    <service id=".service_locator.UxjivMC" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.LeJjUB." class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="routing.loader" type="service_closure" id="routing.loader"/>
       </argument>
     </service>
-    <service id=".service_locator.UxjivMC.router.default" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.LeJjUB..router.default" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="router.default"/>
       <argument>router.default</argument>
       <argument type="service" id="service_container"/>
-      <factory service=".service_locator.UxjivMC" method="withContext"/>
+      <factory service=".service_locator.LeJjUB." method="withContext"/>
     </service>
     <service id=".service_locator.oCg4uHe" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
@@ -3347,14 +3960,14 @@
     <service id=".service_locator.cXsfP3P" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
-        <argument key="logger" type="service_closure" id="logger" on-invalid="ignore"/>
+        <argument key="logger" type="service_closure" id="monolog.logger" on-invalid="ignore"/>
         <argument key="session_factory" type="service_closure" id="session.factory" on-invalid="ignore"/>
       </argument>
     </service>
     <service id="debug.event_dispatcher.inner" class="Symfony\Component\EventDispatcher\EventDispatcher"/>
     <service id="debug.controller_resolver.inner" class="Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver">
       <argument type="service" id="service_container"/>
-      <argument type="service" id="logger" on-invalid="ignore"/>
+      <argument type="service" id="monolog.logger.request" on-invalid="ignore"/>
     </service>
     <service id="debug.argument_resolver.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver">
       <argument type="service" id="argument_metadata_factory"/>
@@ -3379,12 +3992,12 @@
     <service id="debug.argument_resolver.request.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver"/>
     <service id="debug.argument_resolver.session.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\SessionValueResolver"/>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator.S5PPar9"/>
+      <argument type="service" id=".service_locator.5.2.qN."/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator.S5PPar9"/>
+      <argument type="service" id=".service_locator.5.2.qN."/>
     </service>
     <service id=".doctrine.orm.default_metadata_driver.inner" class="Doctrine\Persistence\Mapping\Driver\MappingDriverChain">
       <call method="addDriver">
@@ -3534,6 +4147,13 @@
       <argument>Lint a YAML file and outputs encountered errors</argument>
       <argument>false</argument>
       <argument type="service_closure" id="console.command.yaml_lint"/>
+    </service>
+    <service id=".console.command.form_debug.lazy" class="Symfony\Component\Console\Command\LazyCommand">
+      <argument>debug:form</argument>
+      <argument type="collection"/>
+      <argument>Display form type information</argument>
+      <argument>false</argument>
+      <argument type="service_closure" id="console.command.form_debug"/>
     </service>
     <service id=".console.command.secrets_set.lazy" class="Symfony\Component\Console\Command\LazyCommand">
       <argument>secrets:set</argument>
@@ -3757,7 +4377,7 @@
     </service>
     <service id="console.command_loader" class="Symfony\Component\Console\CommandLoader\ContainerCommandLoader" public="true">
       <tag name="container.no_preload"/>
-      <argument type="service" id=".service_locator.QStG.YU"/>
+      <argument type="service" id=".service_locator.GZRzuHN"/>
       <argument type="collection">
         <argument key="about">console.command.about</argument>
         <argument key="assets:install">console.command.assets_install</argument>
@@ -3779,6 +4399,7 @@
         <argument key="router:match">console.command.router_match</argument>
         <argument key="debug:validator">console.command.validator_debug</argument>
         <argument key="lint:yaml">console.command.yaml_lint</argument>
+        <argument key="debug:form">console.command.form_debug</argument>
         <argument key="secrets:set">console.command.secrets_set</argument>
         <argument key="secrets:remove">console.command.secrets_remove</argument>
         <argument key="secrets:generate-keys">console.command.secrets_generate_key</argument>
@@ -3846,7 +4467,7 @@
         <argument key="make:stimulus-controller">maker.auto_command.make_stimulus_controller</argument>
       </argument>
     </service>
-    <service id=".service_locator.QStG.YU" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.GZRzuHN" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="console.command.about" type="service_closure" id=".console.command.about.lazy"/>
@@ -3869,6 +4490,7 @@
         <argument key="console.command.router_match" type="service_closure" id=".console.command.router_match.lazy"/>
         <argument key="console.command.validator_debug" type="service_closure" id=".console.command.validator_debug.lazy"/>
         <argument key="console.command.yaml_lint" type="service_closure" id=".console.command.yaml_lint.lazy"/>
+        <argument key="console.command.form_debug" type="service_closure" id=".console.command.form_debug.lazy"/>
         <argument key="console.command.secrets_set" type="service_closure" id=".console.command.secrets_set.lazy"/>
         <argument key="console.command.secrets_remove" type="service_closure" id=".console.command.secrets_remove.lazy"/>
         <argument key="console.command.secrets_generate_key" type="service_closure" id=".console.command.secrets_generate_key.lazy"/>
@@ -3934,12 +4556,26 @@
         <argument key="maker.auto_command.make_stimulus_controller" type="service_closure" id=".maker.auto_command.make_stimulus_controller.lazy"/>
       </argument>
     </service>
-    <service id=".service_locator.HJisze0" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.H84_pZM" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="Symfony\Bridge\Twig\Extension\HttpKernelRuntime" type="service_closure" id="twig.runtime.httpkernel"/>
+        <argument key="Symfony\Component\Form\FormRenderer" type="service_closure" id="twig.form.renderer"/>
       </argument>
     </service>
+    <service id="Psr\Http\Message\RequestFactoryInterface" alias="nyholm.psr7.psr17_factory"/>
+    <service id="Psr\Http\Message\ResponseFactoryInterface" alias="nyholm.psr7.psr17_factory"/>
+    <service id="Psr\Http\Message\ServerRequestFactoryInterface" alias="nyholm.psr7.psr17_factory"/>
+    <service id="Psr\Http\Message\StreamFactoryInterface" alias="nyholm.psr7.psr17_factory"/>
+    <service id="Psr\Http\Message\UploadedFileFactoryInterface" alias="nyholm.psr7.psr17_factory"/>
+    <service id="Psr\Http\Message\UriFactoryInterface" alias="nyholm.psr7.psr17_factory"/>
+    <service id="Http\Message\MessageFactory" alias="nyholm.psr7.httplug_factory"/>
+    <service id="Http\Message\RequestFactory" alias="nyholm.psr7.httplug_factory"/>
+    <service id="Http\Message\ResponseFactory" alias="nyholm.psr7.httplug_factory"/>
+    <service id="Http\Message\StreamFactory" alias="nyholm.psr7.httplug_factory"/>
+    <service id="Http\Message\UriFactory" alias="nyholm.psr7.httplug_factory"/>
+    <service id="Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface" alias="Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory"/>
+    <service id="Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface" alias="Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory"/>
     <service id="App\Kernel" alias="kernel" public="true"/>
     <service id="Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface" alias="parameter_bag"/>
     <service id="Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface" alias="parameter_bag"/>
@@ -3965,6 +4601,9 @@
     <service id="Symfony\Contracts\Cache\CacheInterface" alias="cache.app"/>
     <service id="Symfony\Contracts\Cache\TagAwareCacheInterface" alias="cache.app.taggable"/>
     <service id="Symfony\Component\Asset\Packages" alias="assets.packages"/>
+    <service id="mailer" alias="mailer.mailer"/>
+    <service id="Symfony\Component\Mailer\MailerInterface" alias="mailer.mailer"/>
+    <service id="Symfony\Component\Mailer\Transport\TransportInterface" alias="mailer.default_transport"/>
     <service id="Symfony\Component\HttpKernel\Debug\FileLinkFormatter" alias="debug.file_link_formatter"/>
     <service id="Symfony\Component\Stopwatch\Stopwatch" alias="debug.stopwatch"/>
     <service id="router" alias="router.default" public="true"/>
@@ -3975,14 +4614,30 @@
     <service id="Symfony\Component\Routing\RequestContext" alias="router.request_context"/>
     <service id="annotation_reader" alias="annotations.cached_reader"/>
     <service id="Doctrine\Common\Annotations\Reader" alias="annotations.cached_reader"/>
+    <service id="Symfony\Component\PropertyAccess\PropertyAccessorInterface" alias="property_accessor"/>
+    <service id="Symfony\Component\PropertyInfo\PropertyAccessExtractorInterface" alias="property_info"/>
+    <service id="Symfony\Component\PropertyInfo\PropertyDescriptionExtractorInterface" alias="property_info"/>
+    <service id="Symfony\Component\PropertyInfo\PropertyInfoExtractorInterface" alias="property_info"/>
+    <service id="Symfony\Component\PropertyInfo\PropertyTypeExtractorInterface" alias="property_info"/>
+    <service id="Symfony\Component\PropertyInfo\PropertyListExtractorInterface" alias="property_info"/>
+    <service id="Symfony\Component\PropertyInfo\PropertyInitializableExtractorInterface" alias="property_info"/>
+    <service id="Symfony\Component\PropertyInfo\PropertyReadInfoExtractorInterface" alias="property_info.reflection_extractor"/>
+    <service id="Symfony\Component\PropertyInfo\PropertyWriteInfoExtractorInterface" alias="property_info.reflection_extractor"/>
     <service id="cache.default_redis_provider" alias=".cache_connection.GD_MSZC"/>
     <service id="cache.default_memcached_provider" alias=".cache_connection.JKE6keX"/>
     <service id="cache.default_doctrine_dbal_provider" alias="doctrine.dbal.default_connection"/>
     <service id="SessionHandlerInterface" alias="session.handler.native_file"/>
     <service id="session.storage.factory" alias="session.storage.factory.native"/>
     <service id="session.handler" alias="session.handler.native_file"/>
+    <service id="Symfony\Component\Form\ResolvedFormTypeFactoryInterface" alias="form.resolved_type_factory"/>
+    <service id="Symfony\Component\Form\FormRegistryInterface" alias="form.registry"/>
+    <service id="Symfony\Component\Form\FormFactoryInterface" alias="form.factory"/>
+    <service id="form.property_accessor" alias="property_accessor"/>
+    <service id="form.choice_list_factory" alias="form.choice_list_factory.cached"/>
     <service id="Symfony\Component\Validator\Validator\ValidatorInterface" alias="validator"/>
     <service id="validator.mapping.class_metadata_factory" alias="validator"/>
+    <service id="Symfony\Component\Mime\MimeTypesInterface" alias="mime_types"/>
+    <service id="Symfony\Component\Mime\MimeTypeGuesserInterface" alias="mime_types"/>
     <service id="sensio_framework_extra.converter.doctrine.orm.expression_language" alias="sensio_framework_extra.converter.doctrine.orm.expression_language.default"/>
     <service id="Twig_Environment" alias="twig"/>
     <service id="Twig\Environment" alias="twig"/>
@@ -4002,15 +4657,26 @@
     <service id="Doctrine\ORM\EntityManagerInterface $defaultEntityManager" alias="doctrine.orm.default_entity_manager"/>
     <service id="doctrine.orm.default_entity_manager.event_manager" alias="doctrine.dbal.default_connection.event_manager"/>
     <service id="doctrine.migrations.metadata_storage" alias="doctrine.migrations.storage.table_storage"/>
+    <service id="logger" alias="monolog.logger"/>
+    <service id="Psr\Log\LoggerInterface" alias="monolog.logger"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.gSv9zYw" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.S5PPar9"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.5.2.qN."/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
-    <service id="Psr\Log\LoggerInterface" alias="logger"/>
+    <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
+    <service id="Psr\Log\LoggerInterface $consoleLogger" alias="monolog.logger.console"/>
+    <service id="Psr\Log\LoggerInterface $cacheLogger" alias="monolog.logger.cache"/>
+    <service id="Psr\Log\LoggerInterface $mailerLogger" alias="monolog.logger.mailer"/>
+    <service id="Psr\Log\LoggerInterface $phpLogger" alias="monolog.logger.php"/>
+    <service id="Psr\Log\LoggerInterface $eventLogger" alias="monolog.logger.event"/>
+    <service id="Psr\Log\LoggerInterface $routerLogger" alias="monolog.logger.router"/>
+    <service id="Psr\Log\LoggerInterface $doctrineLogger" alias="monolog.logger.doctrine"/>
+    <service id="Psr\Log\LoggerInterface $deprecationLogger" alias="monolog.logger.deprecation"/>
     <service id=".service_locator.0GV1BZZ" alias=".service_locator.gSv9zYw"/>
-    <service id=".service_locator.1blaAny" alias=".service_locator.S5PPar9"/>
+    <service id=".service_locator.SSw5CWn" alias=".service_locator.5.2.qN."/>
     <service id=".service_locator.Qzd9SK7" alias=".service_locator.KznX7JF"/>
+    <service id=".service_locator.Za9MpXe" alias=".service_locator.y4dplYt"/>
     <service id=".service_locator.qBCHs1a" alias=".service_locator.QXcJQkF"/>
     <service id=".service_locator._eRAkJb" alias=".service_locator.jIxfAsi"/>
     <service id="event_dispatcher" alias="debug.event_dispatcher" public="true"/>
@@ -4032,8 +4698,10 @@
     <service id=".service_locator.uo5c0SP" alias=".service_locator.xUrKPVU"/>
     <service id=".service_locator.arik6u0" alias=".service_locator.6B_ZjHa"/>
     <service id=".service_locator.FPFiL9q" alias=".service_locator.GQZbvNR"/>
+    <service id=".service_locator.JSKF5zX" alias=".service_locator.vq2DxCv"/>
+    <service id=".service_locator.JcAUVqs" alias=".service_locator.V5GBaF0"/>
     <service id=".service_locator.qXSdDZ0" alias=".service_locator.amLFGfE"/>
-    <service id=".service_locator.eT4XWle" alias=".service_locator.jIxfAsi"/>
+    <service id=".service_locator.7zhdZSM" alias=".service_locator.jIxfAsi"/>
     <service id=".service_locator.u6DWx23" alias=".service_locator.cXsfP3P"/>
   </services>
 </container>

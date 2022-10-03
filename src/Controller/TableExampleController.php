@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\SymfonyExample;
 use App\Repository\SymfonyExampleRepository;
+use Symfony\Component\HttpFoundation\Request;
 
 class TableExampleController extends AbstractController
 {

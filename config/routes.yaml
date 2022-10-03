@@ -1,9 +1,14 @@
 controllers:
     resource: ../src/Controller/
     type: attribute
-# # message:
-# #      path: /message
-# #      controller: App\Controller\MessageController::message
+message:
+    path: ' /'
+    controller: App\Controller\MessageController::greetings
+messages:
+    alias: message
+# deprecated:
+#         package: 'acme/package'
+#         version: '1.2'
 # # nextpage:
 # #      path: /
 # #      controller: App\Controller\NextpageController::nextpage

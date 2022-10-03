@@ -11,6 +11,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Validator\EmployeeInformationValidator;
 use PhpParser\Node\Stmt\Return_;
 
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
+
 class EmployeeController extends AbstractController
 {
     #[Route('/employee/create', name: 'add_employee')]
