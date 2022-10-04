@@ -259,6 +259,13 @@
         <argument type="service" id=".service_locator.jIxfAsi.App\Controller\ServiceExample2"/>
       </call>
     </service>
+    <service id="App\Controller\StudentFormController" class="App\Controller\StudentFormController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.jIxfAsi.App\Controller\StudentFormController"/>
+      </call>
+    </service>
     <service id="App\Controller\TableExampleController" class="App\Controller\TableExampleController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
@@ -266,6 +273,7 @@
         <argument type="service" id=".service_locator.jIxfAsi.App\Controller\TableExampleController"/>
       </call>
     </service>
+    <service id="App\Form\Type\StudentFormType" class="App\Form\Type\StudentFormType" autowire="true" autoconfigure="true"/>
     <service id="App\Repository\EmployeeInformationRepository" class="App\Repository\EmployeeInformationRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
@@ -3215,6 +3223,9 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\ServiceExample2" class="App\Controller\ServiceExample2" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\ServiceExample2" class="App\Controller\ServiceExample2" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\ServiceExample2" class="App\Controller\ServiceExample2" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\StudentFormController" class="App\Controller\StudentFormController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\StudentFormController" class="App\Controller\StudentFormController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\StudentFormController" class="App\Controller\StudentFormController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\TableExampleController" class="App\Controller\TableExampleController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\TableExampleController" class="App\Controller\TableExampleController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\TableExampleController" class="App\Controller\TableExampleController" autowire="true" autoconfigure="true" abstract="true"/>
@@ -3865,6 +3876,12 @@
     <service id=".service_locator.jIxfAsi.App\Controller\ServiceExample2" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\ServiceExample2"/>
       <argument>App\Controller\ServiceExample2</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.jIxfAsi" method="withContext"/>
+    </service>
+    <service id=".service_locator.jIxfAsi.App\Controller\StudentFormController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\StudentFormController"/>
+      <argument>App\Controller\StudentFormController</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.jIxfAsi" method="withContext"/>
     </service>

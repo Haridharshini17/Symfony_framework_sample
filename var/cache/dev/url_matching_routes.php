@@ -17,6 +17,7 @@ return [
         '/twigexample' => [[['_route' => 'twigpage', '_controller' => 'App\\Controller\\MessageController::twigexample'], null, null, null, false, false, null]],
         '/service/example' => [[['_route' => 'service_example', '_controller' => 'App\\Controller\\ServiceExample::new'], null, null, null, false, false, null]],
         '/service/examples' => [[['_route' => 'service_examples', '_controller' => 'App\\Controller\\ServiceExample2::new'], null, null, null, false, false, null]],
+        '/\\exampleform' => [[['_route' => 'exampleshow', '_controller' => 'App\\Controller\\StudentFormController::new'], null, null, null, false, false, null]],
         '/table/example' => [[['_route' => 'app_table_example', '_controller' => 'App\\Controller\\TableExampleController::createRecord'], null, null, null, false, false, null]],
         '/' => [[['_route' => 'message', '_controller' => 'App\\Controller\\MessageController::greetings'], null, null, null, false, false, null]],
     ],

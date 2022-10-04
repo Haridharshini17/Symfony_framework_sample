@@ -1,13 +1,17 @@
 <?php
 namespace App\Entity;
 
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Doctrine\DBAL\Types\DateType;
+use Symfony\component\Validator\Constraints as Assert;
 
 class StudentForm
 {
+    #[Assert\NotBlank()]
     protected $Name;
+    #[Assert\NotBlank()]
+    #[Assert\Type(\DateTime::class)]
     protected $Age;
+
 
     public function getName(): string
     {
@@ -19,12 +23,12 @@ class StudentForm
         $this->Name = $Name;
     }
 
-    public function getDob(): DateType
+    public function getDob(): ?\DateTime
     {
         return $this->Dob;
-    }
 
-    public function setDob(DateType $Dob): void
+    }
+    public function setDob(?\DateTime $Dob): void
     {
         $this->Dob = $Dob;
     }
