@@ -259,11 +259,11 @@
         <argument type="service" id=".service_locator.jIxfAsi.App\Controller\ServiceExample2"/>
       </call>
     </service>
-    <service id="App\Controller\StudentFormController" class="App\Controller\StudentFormController" public="true" autowire="true" autoconfigure="true">
+    <service id="App\Controller\StudentRegistrationController" class="App\Controller\StudentRegistrationController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
-        <argument type="service" id=".service_locator.jIxfAsi.App\Controller\StudentFormController"/>
+        <argument type="service" id=".service_locator.jIxfAsi.App\Controller\StudentRegistrationController"/>
       </call>
     </service>
     <service id="App\Controller\TableExampleController" class="App\Controller\TableExampleController" public="true" autowire="true" autoconfigure="true">
@@ -273,12 +273,18 @@
         <argument type="service" id=".service_locator.jIxfAsi.App\Controller\TableExampleController"/>
       </call>
     </service>
-    <service id="App\Form\Type\StudentFormType" class="App\Form\Type\StudentFormType" autowire="true" autoconfigure="true"/>
+    <service id="App\Form\Type\StudentFormType" class="App\Form\Type\StudentFormType" autowire="true" autoconfigure="true">
+      <tag name="form.type"/>
+    </service>
     <service id="App\Repository\EmployeeInformationRepository" class="App\Repository\EmployeeInformationRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
     <service id="App\Repository\RegenerateRepository" class="App\Repository\RegenerateRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\StudentRegistrationRepository" class="App\Repository\StudentRegistrationRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
@@ -822,9 +828,11 @@
       <argument type="service" id="form.registry"/>
       <argument type="collection">
         <argument>Symfony\Component\Form\Extension\Core\Type</argument>
+        <argument>App\Form\Type</argument>
         <argument>Symfony\Bridge\Doctrine\Form\Type</argument>
       </argument>
       <argument type="collection">
+        <argument>App\Form\Type\StudentFormType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\FormType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\ChoiceType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\FileType</argument>
@@ -1889,7 +1897,7 @@
       <argument type="service" id="form.registry"/>
     </service>
     <service id="form.extension" class="Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension">
-      <argument type="service" id=".service_locator.y4dplYt"/>
+      <argument type="service" id=".service_locator.cf0K3We"/>
       <argument type="collection">
         <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="iterator">
           <argument type="service" id="form.type_extension.form.transformation_failure_handling"/>
@@ -2563,7 +2571,7 @@
       <factory class="Doctrine\ORM\EntityManager" method="create"/>
     </service>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory">
-      <argument type="service" id=".service_locator.0IiCOYI"/>
+      <argument type="service" id=".service_locator.Ol2qkTC"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -3223,16 +3231,20 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\ServiceExample2" class="App\Controller\ServiceExample2" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\ServiceExample2" class="App\Controller\ServiceExample2" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\ServiceExample2" class="App\Controller\ServiceExample2" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\StudentFormController" class="App\Controller\StudentFormController" autowire="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\StudentFormController" class="App\Controller\StudentFormController" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\Controller\StudentFormController" class="App\Controller\StudentFormController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\StudentRegistrationController" class="App\Controller\StudentRegistrationController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\StudentRegistrationController" class="App\Controller\StudentRegistrationController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\StudentRegistrationController" class="App\Controller\StudentRegistrationController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\TableExampleController" class="App\Controller\TableExampleController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\TableExampleController" class="App\Controller\TableExampleController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\TableExampleController" class="App\Controller\TableExampleController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\Type\StudentFormType" class="App\Form\Type\StudentFormType" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Form\Type\StudentFormType" class="App\Form\Type\StudentFormType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\EmployeeInformationRepository" class="App\Repository\EmployeeInformationRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\EmployeeInformationRepository" class="App\Repository\EmployeeInformationRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\RegenerateRepository" class="App\Repository\RegenerateRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\RegenerateRepository" class="App\Repository\RegenerateRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\StudentRegistrationRepository" class="App\Repository\StudentRegistrationRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\StudentRegistrationRepository" class="App\Repository\StudentRegistrationRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\SymfonyExampleRepository" class="App\Repository\SymfonyExampleRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\SymfonyExampleRepository" class="App\Repository\SymfonyExampleRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Validator\ConstraintValidatorInterface.0.App\Validator\EmployeeInformationValidator" class="App\Validator\EmployeeInformationValidator" autowire="true" abstract="true"/>
@@ -3712,9 +3724,10 @@
       <argument type="service" id="debug.argument_resolver.not_tagged_controller.inner"/>
       <argument type="service" id="debug.stopwatch"/>
     </service>
-    <service id=".service_locator.y4dplYt" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.cf0K3We" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Form\Type\StudentFormType" type="service_closure" id="App\Form\Type\StudentFormType"/>
         <argument key="Symfony\Bridge\Doctrine\Form\Type\EntityType" type="service_closure" id="form.type.entity"/>
         <argument key="Symfony\Component\Form\Extension\Core\Type\ChoiceType" type="service_closure" id="form.type.choice"/>
         <argument key="Symfony\Component\Form\Extension\Core\Type\ColorType" type="service_closure" id="form.type.color"/>
@@ -3730,11 +3743,12 @@
         <argument key="doctrine.orm.listeners.doctrine_token_provider_schema_subscriber" type="service_closure" id="doctrine.orm.listeners.doctrine_token_provider_schema_subscriber"/>
       </argument>
     </service>
-    <service id=".service_locator.0IiCOYI" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.Ol2qkTC" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Repository\EmployeeInformationRepository" type="service_closure" id="App\Repository\EmployeeInformationRepository"/>
         <argument key="App\Repository\RegenerateRepository" type="service_closure" id="App\Repository\RegenerateRepository"/>
+        <argument key="App\Repository\StudentRegistrationRepository" type="service_closure" id="App\Repository\StudentRegistrationRepository"/>
         <argument key="App\Repository\SymfonyExampleRepository" type="service_closure" id="App\Repository\SymfonyExampleRepository"/>
       </argument>
     </service>
@@ -3879,9 +3893,9 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.jIxfAsi" method="withContext"/>
     </service>
-    <service id=".service_locator.jIxfAsi.App\Controller\StudentFormController" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator_context" id="App\Controller\StudentFormController"/>
-      <argument>App\Controller\StudentFormController</argument>
+    <service id=".service_locator.jIxfAsi.App\Controller\StudentRegistrationController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\StudentRegistrationController"/>
+      <argument>App\Controller\StudentRegistrationController</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.jIxfAsi" method="withContext"/>
     </service>
@@ -4693,7 +4707,7 @@
     <service id=".service_locator.0GV1BZZ" alias=".service_locator.gSv9zYw"/>
     <service id=".service_locator.SSw5CWn" alias=".service_locator.5.2.qN."/>
     <service id=".service_locator.Qzd9SK7" alias=".service_locator.KznX7JF"/>
-    <service id=".service_locator.Za9MpXe" alias=".service_locator.y4dplYt"/>
+    <service id=".service_locator.dAqEQ7b" alias=".service_locator.cf0K3We"/>
     <service id=".service_locator.qBCHs1a" alias=".service_locator.QXcJQkF"/>
     <service id=".service_locator._eRAkJb" alias=".service_locator.jIxfAsi"/>
     <service id="event_dispatcher" alias="debug.event_dispatcher" public="true"/>
