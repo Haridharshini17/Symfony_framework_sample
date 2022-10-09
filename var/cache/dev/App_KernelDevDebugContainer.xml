@@ -3615,13 +3615,20 @@
         <argument key="merge" type="service_closure" id="App\Service\MergeService"/>
       </argument>
     </service>
+    <service id=".service_locator.k8sYntp" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="doctrine" type="service_closure" id="doctrine"/>
+        <argument key="entityManager" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+      </argument>
+    </service>
     <service id=".service_locator.amLFGfE" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="record" type="service_closure" id=".errored..service_locator.amLFGfE.App\Entity\SymfonyExample"/>
       </argument>
     </service>
-    <service id=".service_locator.5.2.qN." class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.O295JkZ" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\EmployeeController::create" type="service_closure" id=".service_locator.6B_ZjHa"/>
@@ -3634,6 +3641,7 @@
         <argument key="App\Controller\InjectedController::new" type="service_closure" id=".service_locator.V5GBaF0"/>
         <argument key="App\Controller\ServiceExample2::new" type="service_closure" id=".service_locator.vq2DxCv"/>
         <argument key="App\Controller\ServiceExample::new" type="service_closure" id=".service_locator.vq2DxCv"/>
+        <argument key="App\Controller\StudentRegistrationController::new" type="service_closure" id=".service_locator.k8sYntp"/>
         <argument key="App\Controller\TableExampleController::createRecord" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController::show" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController::shows" type="service_closure" id=".service_locator.amLFGfE"/>
@@ -3653,6 +3661,7 @@
         <argument key="App\Controller\InjectedController:new" type="service_closure" id=".service_locator.V5GBaF0"/>
         <argument key="App\Controller\ServiceExample2:new" type="service_closure" id=".service_locator.vq2DxCv"/>
         <argument key="App\Controller\ServiceExample:new" type="service_closure" id=".service_locator.vq2DxCv"/>
+        <argument key="App\Controller\StudentRegistrationController:new" type="service_closure" id=".service_locator.k8sYntp"/>
         <argument key="App\Controller\TableExampleController:createRecord" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController:show" type="service_closure" id=".service_locator.GQZbvNR"/>
         <argument key="App\Controller\TableExampleController:shows" type="service_closure" id=".service_locator.amLFGfE"/>
@@ -4023,12 +4032,12 @@
     <service id="debug.argument_resolver.request.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver"/>
     <service id="debug.argument_resolver.session.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\SessionValueResolver"/>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator.5.2.qN."/>
+      <argument type="service" id=".service_locator.O295JkZ"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator.5.2.qN."/>
+      <argument type="service" id=".service_locator.O295JkZ"/>
     </service>
     <service id=".doctrine.orm.default_metadata_driver.inner" class="Doctrine\Persistence\Mapping\Driver\MappingDriverChain">
       <call method="addDriver">
@@ -4692,7 +4701,7 @@
     <service id="Psr\Log\LoggerInterface" alias="monolog.logger"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.gSv9zYw" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.5.2.qN."/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.O295JkZ"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
@@ -4705,7 +4714,7 @@
     <service id="Psr\Log\LoggerInterface $doctrineLogger" alias="monolog.logger.doctrine"/>
     <service id="Psr\Log\LoggerInterface $deprecationLogger" alias="monolog.logger.deprecation"/>
     <service id=".service_locator.0GV1BZZ" alias=".service_locator.gSv9zYw"/>
-    <service id=".service_locator.SSw5CWn" alias=".service_locator.5.2.qN."/>
+    <service id=".service_locator.s1grzus" alias=".service_locator.O295JkZ"/>
     <service id=".service_locator.Qzd9SK7" alias=".service_locator.KznX7JF"/>
     <service id=".service_locator.dAqEQ7b" alias=".service_locator.cf0K3We"/>
     <service id=".service_locator.qBCHs1a" alias=".service_locator.QXcJQkF"/>
@@ -4731,6 +4740,7 @@
     <service id=".service_locator.FPFiL9q" alias=".service_locator.GQZbvNR"/>
     <service id=".service_locator.JSKF5zX" alias=".service_locator.vq2DxCv"/>
     <service id=".service_locator.JcAUVqs" alias=".service_locator.V5GBaF0"/>
+    <service id=".service_locator.uacLucP" alias=".service_locator.k8sYntp"/>
     <service id=".service_locator.qXSdDZ0" alias=".service_locator.amLFGfE"/>
     <service id=".service_locator.7zhdZSM" alias=".service_locator.jIxfAsi"/>
     <service id=".service_locator.u6DWx23" alias=".service_locator.cXsfP3P"/>

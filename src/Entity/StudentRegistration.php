@@ -20,9 +20,6 @@ class StudentRegistration
     #[ORM\Column]
     private ?int $Age = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $subjectgroup = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -52,15 +49,15 @@ class StudentRegistration
         return $this;
     }
 
-    public function getSubjectgroup(): ?string
-    {
-        return $this->subjectgroup;
-    }
+//     public function getSubjectGroup(): ?string
+//     {
+//         return $this->SubjectGroup;
+//     }
 
-    public function setSubjectgroup(string $Subjectgroup): self
-    {
-        $this->Subjectgroup = $Subjectgroup;
+//     public function setSubjectGroup(string $SubjectGroup): self
+//     {
+//         $this->SubjectGroup = $SubjectGroup;
 
-        return $this;
-    }
+//         return $this;
+//     }
 }
