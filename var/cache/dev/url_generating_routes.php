@@ -19,9 +19,9 @@ return [
     'service_example' => [[], ['_controller' => 'App\\Controller\\ServiceExample::new'], [], [['text', '/service/example']], [], [], []],
     'service_examples' => [[], ['_controller' => 'App\\Controller\\ServiceExample2::new'], [], [['text', '/service/examples']], [], [], []],
     'exampleshow' => [[], ['_controller' => 'App\\Controller\\StudentRegistrationController::new'], [], [['text', '/exampleform']], [], [], []],
+    'records_show' => [['id'], ['_controller' => 'App\\Controller\\StudentRegistrationController::show'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/exampleform']], [], [], []],
     'app_table_example' => [[], ['_controller' => 'App\\Controller\\TableExampleController::createRecord'], [], [['text', '/table/example']], [], [], []],
     'product_show' => [['id'], ['_controller' => 'App\\Controller\\TableExampleController::show'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/record']], [], [], []],
     'product_shows' => [['id'], ['_controller' => 'App\\Controller\\TableExampleController::shows'], [], [['variable', '/', '[^/]++', 'id', true], ['text', '/products']], [], [], []],
     'message' => [[], ['_controller' => 'App\\Controller\\MessageController::greetings'], [], [['text', '/']], [], [], []],
-    'messages' => [[], ['_controller' => 'App\\Controller\\MessageController::greetings'], [], [['text', '/']], [], [], []],
 ];

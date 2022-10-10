@@ -1,0 +1,17 @@
+Doctrine\Tests\ORM\Mapping\Bloodgroup:
+ type: entity
+ repositoryClass: Doctrine\Tests\ORM\Mapping\BloodgroupRepository
+ table: Phone_number_table
+ schema: student_records
+ indexes:
+   name_index:
+      columns: [name]
+ id: 
+  id:
+    type: integer
+    generator:
+      strategy: AUTO 
+ fields:
+  phonenumber:
+    type: integer
+    length: 50

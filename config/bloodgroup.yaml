@@ -1,0 +1,17 @@
+Doctrine\Tests\ORM\Mapping\Bloodgroup:
+ type: entity
+ repositoryClass: Doctrine\Tests\ORM\Mapping\BloodgroupRepository
+ table: blood_grouping
+ schema: student_records
+ indexes:
+   name_index:
+      columns: [name]
+ id: 
+  id:
+    type: integer
+    generator:
+      strategy: AUTO 
+ fields:
+  blood_group_name:
+    type: text
+    length: 50

@@ -1,0 +1,40 @@
+Doctrine\Tests\ORM\Mapping\UserTable:
+ type: entity
+ repositoryClass: Doctrine\Tests\ORM\Mapping\UserTableRepository
+ table: user_table_records
+ schema: student_records
+ indexes:
+   name_index:
+      columns: [name]
+ id: 
+  id:
+    type: integer
+    generator:
+      strategy: AUTO 
+ fields:
+  first_name:
+    type: text
+    length: 50
+  last_name:
+    type: text
+    length: 50
+ oneToOne:
+  blood_group_id:
+    targetEntity: blood_grouping
+    joinColumn:
+      name: blood_group_id
+      referencedColumnName: id
+      onDelete: CASCADE
+      onUpdate: CASCADE
+  Gender_type_id:
+    targetEntity: gender_type
+    joinColumn:
+      name: Gender_type_id
+      referencedColumnName: id
+      onDelete: CASCADE
+      onUpdate: CASCADE
+ oneToMany:
+  phonenumbers:
+    targetEntity: Phone_number_table
+    mappedBy: id
+    cascade: ["persist", "merge"]
